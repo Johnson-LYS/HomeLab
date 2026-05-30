@@ -27,6 +27,19 @@ status: unverified
 | 索尼电视 | K-85XR70 | 192.168.8.12 | 千兆 | 客厅 |
 | Apple TV 4K | — | TODO（DHCP?） | 千兆 | 客厅电视柜 |
 
+## SSH 接入（已验证：来自 `~/.ssh/config`，2026-05-30）
+
+全局走 1Password SSH Agent（`Host *` → `IdentityAgent .../1password/.../agent.sock`），本地无私钥。
+
+| 别名 | 设备 | 地址 | 用户 | 端口 |
+|---|---|---|---|---|
+| `n100` | 联想百应 NUC | 192.168.8.15 | `johnson` | 22 |
+| `jonas` | QNAP | 192.168.8.10 | `Johnson`（大写） | 22 |
+| — | 极摩客 PVE | 192.168.8.16 | ⚠ 待确认 | 22 |
+| 本机 | Mac mini | 192.168.8.18 | `liyongsheng` | — |
+
+> 注：「ssh config 里有」≠「连得通」。首次只读连通后再把对应设备标 `verified`。
+
 ## 待核实 / 待补 (TODO)
 
 - ⚠️ **网口速率"2.4G"** 为用户原话，疑为 **2.5GbE**，实连后核实并改正。
