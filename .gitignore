@@ -1,0 +1,21 @@
+# 密钥安全：仓库零明文密钥。以下为防误提交的兜底。
+*.secret
+*.secrets
+.env
+.env.*
+!.env.example
+secrets.local.*
+*.key
+*.pem
+id_rsa
+id_ed25519
+op-resolved.*
+
+# 本机/工具产物
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# Claude 本机设置（团队共享走 settings.json，本机走 .local 不提交）
+.claude/settings.local.json
