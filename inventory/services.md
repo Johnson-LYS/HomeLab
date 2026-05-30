@@ -11,14 +11,52 @@ status: unverified
 
 ## 联想百应 NUC · Debian (192.168.8.15) — 主力
 
-| 服务 | 作用 | 访问 | 备注 |
+> ✅ 已只读核实（2026-05-30，`ssh n100 'docker ps; ss -tln'`）。1Panel 管理 30+ docker 服务。
+> 端口为宿主发布端口（`host net` = 容器用主机网络，无独立映射）。内存 7.5Gi、nvme 233G 用 67%。
+
+### 网络 / 接入（多为 P0 安全关键）
+| 服务 | 端口 | 作用 | 备注 |
 |---|---|---|---|
-| 1Panel | 面板，管理 Docker 应用 | TODO 管理地址/端口 | 上面部署了"很多服务"，待逐一登记 |
-| Docker apps | 各类自托管服务 | 经 NPM 反代 *.jsho.top | TODO 清单 |
-| ddns-go | 动态 DNS | — | 解析 `portal.jsho.top` → 家庭公网 IP |
-| v2fly | 加密代理回家 | vmess 协议 | **公网暴露面，P0 安全关键** |
-| AdGuardHome | 私有 DNS | TODO | 解析 `*.jsho.top` 到内网；全网 DNS |
-| Nginx Proxy Manager | 反向代理 | TODO | 域名反代 + 泛域名 Let's Encrypt |
+| Nginx Proxy Manager | :80 :81 :443 | 反向代理 + 泛域名 LE | `*.jsho.top` 反代入口 |
+| AdGuardHome | :53(DNS) :3003(admin) :8443 :853 | 私有 DNS | 全网解析依赖；`*.jsho.top`→内网 |
+| ddns-go | host net | 动态 DNS | `portal.jsho.top`→家庭公网 IP |
+| v2fly | :13142 | vmess 加密代理回家 | **公网暴露面** |
+| **wg-easy (WireGuard)** | :60085/tcp :60086/udp | **VPN 入内网** | ⚠ 新发现的第三条远程接入通道 |
+| sub-store | :3001 | 代理订阅管理 | |
+
+### 智能家居
+| 服务 | 端口 | 作用 |
+|---|---|---|
+| Home Assistant | host net | 智能家居中枢（2026.3） |
+| zigbee2mqtt | :8080 | Zigbee 网关 |
+| z2m-mqtt (mosquitto) | :1883 | MQTT broker |
+| matter-server | host net | Matter |
+| scrypted | host net | 摄像头/NVR |
+| node-red | host net | 自动化流 |
+
+### 媒体 / 信息
+| 服务 | 端口 | 作用 |
+|---|---|---|
+| immich (server/ml/redis/pg) | :2283 | 照片管理（⚠ 数据卷位置待确认） |
+| freshrss | :1236 | RSS |
+| homepage | :3006 | 导航页 |
+| sun-panel | :3002 | 导航页 |
+
+### 自动化 / 数据 / 监控 / AI
+| 服务 | 端口 | 作用 |
+|---|---|---|
+| n8n | :5678 | 工作流自动化 |
+| qinglong | :5700 | 定时脚本面板 |
+| nocodb | :8081 | 无代码数据库 |
+| monitor: grafana / prometheus | :3000 / :9090 | 监控（AI 运维可复用） |
+| database-postgres (pg17) | :5432 | 共享数据库 |
+| teslamate (+grafana/api) | :4000 / :3004 / :8082 | 特斯拉行车记录 |
+| new-api | :30001 | AI API 网关 |
+| bark-server | :8787 | 推送通知（可用于告警） |
+| 基础: postgres15 / redis | 内部 | 多服务依赖 |
+
+> 1Panel 本体管理端口尚未在 docker 列表体现（1Panel 自身非容器或用别的端口），待确认。
+> 完整端口与随机高位端口（21064-21101 等，疑 HA/HomeKit/matter）未逐一登记。
 
 ## 极摩客 NUC · PVE (192.168.8.16)
 

@@ -49,6 +49,15 @@ status: unverified
 - 公网入口：`portal.jsho.top`（ddns-go 动态解析到家庭公网 IP）
 - 内网服务：`*.jsho.top`，由 AdGuardHome 解析到内网，Nginx Proxy Manager 反代 + 泛域名 Let's Encrypt。
 
+### 已知远程接入通道（入内网，安全关键）
+
+实际有 **3 条**从外部进内网的路径，均在 n100：
+1. **v2fly / vmess**（:13142）—— 加密代理回家。
+2. **wg-easy / WireGuard**（:60085/tcp, :60086/udp）—— VPN（2026-05-30 docker ps 新发现）。
+3. **NPM 反代**（:443 + portal.jsho.top）—— 反代出去的服务对公网可达。
+
+> ⚠ 这 3 条 + 主路由端口转发 = 真实公网攻击面。轮换凭证 / 梳理防火墙时以此为重点。
+
 ## TODO
 
 - 主路由/网关 IP、各 mesh 节点管理 IP、交换机是否网管型。
