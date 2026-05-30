@@ -31,14 +31,15 @@ status: unverified
 
 全局走 1Password SSH Agent（`Host *` → `IdentityAgent .../1password/.../agent.sock`），本地无私钥。
 
-| 别名 | 设备 | 地址 | 用户 | 端口 |
-|---|---|---|---|---|
-| `n100` | 联想百应 NUC | 192.168.8.15 | `johnson` | 22 |
-| `jonas` | QNAP | 192.168.8.10 | `Johnson`（大写） | 22 |
-| — | 极摩客 PVE | 192.168.8.16 | ⚠ 待确认 | 22 |
-| 本机 | Mac mini | 192.168.8.18 | `liyongsheng` | — |
+| 别名 | 设备 | 地址 | 用户 | 端口 | 主机名 | OS | 状态 |
+|---|---|---|---|---|---|---|---|
+| `n100` | 联想百应 NUC | 192.168.8.15 | `johnson` | 22 | `debian-mini` | Debian Linux 6.1.0-37 | ✅ 已连通 2026-05-30 |
+| `jonas` | QNAP | 192.168.8.10 | `Johnson`（大写） | 22 | `Jonas` | QNAP Linux 5.10.60-qnap | ✅ 已连通 2026-05-30 |
+| — | 极摩客 PVE | 192.168.8.16 | ⚠ 待确认 | 22 | — | — | known_hosts 有，未连 |
+| 本机 | Mac mini | 192.168.8.18 | `liyongsheng` | — | — | macOS（本机） | 运维在此本地执行 |
 
-> 注：「ssh config 里有」≠「连得通」。首次只读连通后再把对应设备标 `verified`。
+> 已连通 = 只读 `ssh <别名> 'hostname;whoami;uname -sr'` 成功（走 1Password Agent）。
+> ⚠ n100 实际主机名为 `debian-mini`，与 ssh config 里另一个 `debian-mini`(192.168.6.252) 同名但非同机，注意区分。
 
 ## 待核实 / 待补 (TODO)
 
