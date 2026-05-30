@@ -43,20 +43,66 @@ status: unverified
 | 192.168.8.16 | 极摩客 NUC — PVE 管理页 | |
 | 192.168.8.18 | Mac mini M4 | 运维中枢 + Surge 网关 |
 
+## 接入设备快照（主路由，27 台，2026-05-30）
+
+> 来源：主路由后台「接入设备/在线设备」（无头浏览器只读）。DHCP 动态事实，IP/在线随时变；
+> 刷新需重登后台。所有设备从主路由视角均显示"有线接入"（经交换机/ mesh 回程）。
+
+**基础设施 / 服务器**
+| 设备 | IP | MAC |
+|---|---|---|
+| Lenovo-N100（n100·Debian 主力） | .15 | 00:e0:4c:71:80:07 |
+| Mac mini（中枢） | .18 | d0:11:e5:a1:cf:d6 |
+| NAS（QNAP·jonas） | .10 | 24:5e:be:83:45:88 |
+| GMK-N100（极摩客·PVE） | .16 | e0:51:d8:13:48:f0 |
+| fnOverQnap（fnOS VM） | .11 | 52:54:00:77:fe:8a（QEMU）|
+| TL-XDR3040 易展版（mesh 子节点） | .107 | 74:39:89:ac:0d:a5 |
+
+**影音**：SonyTV `.12`、Apple TV 4K `.113`、Apple HomePod 5 ×3（`.137/.183/.158`）
+
+**智能家居（非 Zigbee / Wi-Fi 类）**
+| 设备 | IP | 备注 |
+|---|---|---|
+| lumi-gateway-v3 | .111 | Aqara/米家网关 |
+| yeelink-light-lamp15 | .38 | Yeelight 灯 |
+| uplus-haier | .112 | 海尔家电 |
+| NarwalRobotics | .188 | 云鲸扫地机 |
+| Magic-Switch-S1E | .110 | |
+| tg7100c / Bouffalolab | .103 / .179 | BL602 Wi-Fi 模组 |
+
+**摄像头**：IPC1 `.50`、IPC2 `.51`（MAC 80:ae:54:*）
+
+**终端**：iPhone ×2（`.163/.180`）、iPad `.186`、联想 K6 Note `.104`、[本机]`.162`（访问后台的 Mac，随机 MAC）
+
+**未知**：未知设备-B76F `.60`、未知设备-22E0 `.254`（建议核实是否自有设备）
+
+> ⚠ 多台 Apple/手机为**随机 MAC**（locally-administered），非固定身份。
+
 ## 域名 / 对外
 
 - 主域名：`jsho.top`
 - 公网入口：`portal.jsho.top`（ddns-go 动态解析到家庭公网 IP）
 - 内网服务：`*.jsho.top`，由 AdGuardHome 解析到内网，Nginx Proxy Manager 反代 + 泛域名 Let's Encrypt。
 
-### 已知远程接入通道（入内网，安全关键）
+### 公网入站暴露面（主路由实测 2026-05-30，无头浏览器只读）
 
-实际有 **3 条**从外部进内网的路径，均在 n100：
-1. **v2fly / vmess**（:13142）—— 加密代理回家。
-2. **wg-easy / WireGuard**（:60085/tcp, :60086/udp）—— VPN（2026-05-30 docker ps 新发现）。
-3. **NPM 反代**（:443 + portal.jsho.top）—— 反代出去的服务对公网可达。
+**显式端口转发（仅 2 条，均 → n100 .15）：**
+| 名称 | 协议 | 广域网端口 | → 内网 |
+|---|---|---|---|
+| v2fly | TCP+UDP | 13142 | 192.168.8.15:13142 |
+| wireguard | TCP+UDP | 60086 | 192.168.8.15:60086 |
 
-> ⚠ 这 3 条 + 主路由端口转发 = 真实公网攻击面。轮换凭证 / 梳理防火墙时以此为重点。
+**UPnP（⚠ 已启用，内网设备可自行开公网口）当前动态映射：**
+- Syncthing：TCP/UDP `42666 → 192.168.8.11:22000`（fnOS VM）
+- ZeroTier：UPnP 列表中有映射（overlay VPN）
+
+**关键结论 / 安全提示：**
+- ✅ **无 80/443 端口转发** → NPM 反代的内网服务**并非直接公网可达**，对外仅经隧道（v2fly / WireGuard / ZeroTier）。比预想更安全。
+- ⚠ **UPnP 已开**：任意内网设备可自行打开公网端口（Syncthing 已自开 42666）。建议评估关闭 UPnP，改按需手动端口转发。
+- ⚠ 新发现 **ZeroTier**（第 4 个 overlay 网络）——需定位运行位置与用途。
+- 当前真实入站口 = v2fly(13142) + WireGuard(60086) + UPnP 动态(Syncthing 42666 / ZeroTier)。
+
+> 主路由后台：ZTE「星云全屋主路由 MAX」，`http://192.168.8.1`，仅密码登录（`op://HomeLab/<主路由管理密码 item-id>/password`）。**RED-03：只读，禁改。**
 
 ## TODO
 

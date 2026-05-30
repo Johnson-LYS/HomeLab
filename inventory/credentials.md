@@ -12,9 +12,19 @@ status: placeholder
 
 ## 约定
 
-- 统一 Vault 名暂定：`HomeLab`（待用户确认）。
+- 统一 Vault：**`HomeLab`**（已确认存在）。
 - 引用格式：`op://HomeLab/<item>/<field>`。
-- SSH 不在此（走 1Password SSH Agent 转发，本地无私钥）。
+- ⚠ **`op://` 引用不支持非 ASCII**：条目名为中文（如「主路由管理密码」）时，`op read` 报 `invalid character`。
+  → 用**条目 ID**（`op item list --vault HomeLab` 可查）或给条目起 ASCII 名。
+- SSH 走 1Password SSH Agent 转发（密钥条目 `Johnson (Ed25519)` 在 HomeLab vault），本地无私钥。
+
+## 已录入（real）
+
+| 用途 | op:// 引用 | 备注 |
+|---|---|---|
+| 主路由管理后台 | `op://HomeLab/kaxaao54c3iiibcwjd4wx2ehcm/password` | 中文条目「主路由管理密码」，仅密码登录；用 item-id 引用 |
+| Nginx Proxy Manager | `op://HomeLab/Nginx Proxy Manager/password` | 用户已录入（ASCII 名，可直接用）|
+| SSH 私钥 | `op://HomeLab/Johnson (Ed25519)` | 1Password SSH Agent 使用 |
 
 ## 引用表（待填充 — 现为占位）
 
