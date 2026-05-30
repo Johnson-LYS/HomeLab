@@ -41,6 +41,17 @@ status: unverified
 > 已连通 = 只读 `ssh <别名> 'hostname;whoami;uname -sr'` 成功（走 1Password Agent）。
 > ⚠ n100 实际主机名为 `debian-mini`，与 ssh config 里另一个 `debian-mini`(192.168.6.252) 同名但非同机，注意区分。
 
+## QNAP 存储（已只读核实 2026-05-30，`qcli_storage`）
+
+| Port | 设备 | 容量 | 型号 | RAID | 卷 | 用量 |
+|---|---|---|---|---|---|---|
+| 1 | /dev/sda (3.5" SATA HDD) | 14.55 TB | **Seagate ST16000NM000J**（Exos 企业氦气） | md2 Single `[U]` | DataVol1 (`/share/CACHEDEV2_DATA`) | **77%**（11.0T/14.3T，剩 3.3T） |
+| 3 | /dev/nvme0n1 (M.2 PCIe) | 465.76 GB | **ZHITAI Ti600 500GB** | md1 Single | SSD (`/share/CACHEDEV1_DATA`) | 24%（96G/402G） |
+
+> 🔴 **单点风险（关联 RED-01）**：16T 为 **Single RAID 无冗余 + 唯一副本 + 已 77% 将满**。
+> 属性级 SMART（`get_hd_smartinfo -d 1`）需 root（`Johnson` 无权，"Open device fail"）→ 暂只能确认阵列 `[U]` 在线，未能读重映射扇区/通电时长/温度。
+> **行动建议**：① 尽快定备份策略（→ 未来 `backup-verify` skill）；② SMART 监控需 root 方案（QNAP GUI 或授权）。
+
 ## 待核实 / 待补 (TODO)
 
 - ⚠️ **网口速率"2.4G"** 为用户原话，疑为 **2.5GbE**，实连后核实并改正。

@@ -64,12 +64,15 @@ status: unverified
 |---|---|---|---|
 | Proxmox VE | 虚拟化实验平台 | https://192.168.8.16:8006 (待核实) | "做实验"用，VM 增删频繁 |
 
-## QNAP TS-264C (192.168.8.10)
+## QNAP TS-264C `jonas` (192.168.8.10) — ✅ 已只读核实 2026-05-30
 
 | 服务 | 作用 | 备注 |
 |---|---|---|
-| Emby | 媒体服务 | 唯一对外服务 |
-| 存储 | 16TB 单盘 | ⚠️ 单盘无冗余，备份策略待定 |
+| Emby | 媒体服务 | ⚠ 不在 docker（`docker: command not found`）→ 很可能是 **QPKG 原生应用**，安装路径/端口待确认 |
+| 存储 | 见 `devices.md` QNAP 存储 | 16T(DataVol1 77%) + NVMe(SSD 24%)；**单盘无冗余 = 单点风险** |
+
+> QTS（Linux 5.10.60-qnap）。SMART 属性需 root；阵列 `md2 [U]` 在线。
+> 未发现 Container Station docker（该用户无 docker 权限或未装），Emby 走 QPKG 概率大。
 
 ## Mac mini M4 (192.168.8.18)
 
