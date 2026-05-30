@@ -34,6 +34,8 @@ status: unverified
 | scrypted | host net | 摄像头/NVR |
 | node-red | host net | 自动化流 |
 
+> Zigbee 设备清单（33 个 + 协调器）见 [`inventory/iot.md`](iot.md)。
+
 ### 媒体 / 信息
 | 服务 | 端口 | 作用 |
 |---|---|---|
