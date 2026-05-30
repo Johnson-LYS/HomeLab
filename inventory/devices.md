@@ -35,7 +35,7 @@ status: unverified
 |---|---|---|---|---|---|---|---|
 | `n100` | 联想百应 NUC | 192.168.8.15 | `johnson` | 22 | `debian-mini` | Debian Linux 6.1.0-37 | ✅ 已连通 2026-05-30 |
 | `jonas` | QNAP | 192.168.8.10 | `Johnson`（大写） | 22 | `Jonas` | QNAP Linux 5.10.60-qnap | ✅ 已连通 2026-05-30 |
-| — | 极摩客 PVE | 192.168.8.16 | ⚠ 待确认 | 22 | — | — | known_hosts 有，未连 |
+| —（直连 IP） | 极摩客 PVE | 192.168.8.16 | `root` | 22 | `pve` | PVE 9.1.1 / kernel 6.17 | ✅ 已连通 2026-05-30 |
 | 本机 | Mac mini | 192.168.8.18 | `liyongsheng` | — | — | macOS（本机） | 运维在此本地执行 |
 
 > 已连通 = 只读 `ssh <别名> 'hostname;whoami;uname -sr'` 成功（走 1Password Agent）。

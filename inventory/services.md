@@ -58,11 +58,29 @@ status: unverified
 > 1Panel 本体管理端口尚未在 docker 列表体现（1Panel 自身非容器或用别的端口），待确认。
 > 完整端口与随机高位端口（21064-21101 等，疑 HA/HomeKit/matter）未逐一登记。
 
-## 极摩客 NUC · PVE (192.168.8.16)
+## 极摩客 NUC · PVE `pve` (192.168.8.16) — ✅ 已只读核实 2026-05-30
 
-| 服务 | 作用 | 访问 | 备注 |
+PVE 9.1.1（kernel 6.17，uptime 153 天）。管理页 `https://192.168.8.16:8006`。N100 4核/15Gi/512G。
+
+### 虚拟机（12 个，多为实验，按需开关）
+| VMID | 名称 | 状态 | 内存 | 说明 |
+|---|---|---|---|---|
+| 102 | **fnOS** | ▶ **running** | 2G | 虚拟化 NAS（飞牛 OS）——唯一常开 VM |
+| 100 | win11 | stopped | 8G | |
+| 101 | zorinOS | stopped | 8G | |
+| 103 | uos | stopped | 8G | |
+| 1111 | Minecraft | stopped | 12G | |
+| 109/110 | istoreos / immortalwrt | stopped | — | 软路由实验 |
+| 其余 | xp/freedos/templeOS/ubuntu/debian | stopped | — | 实验 |
+
+LXC：`moltbot`(10001, stopped)。
+
+### 存储
+| 名称 | 类型 | 用量 | 备注 |
 |---|---|---|---|
-| Proxmox VE | 虚拟化实验平台 | https://192.168.8.16:8006 (待核实) | "做实验"用，VM 增删频繁 |
+| local | dir | 39% (37/94G) | ISO/备份 |
+| local-lvm | lvmthin | 19% | VM 磁盘 |
+| **qnap_ssd** | **nfs** | 24% | ⚠ **NFS 挂自 QNAP SSD 卷 → PVE 依赖 QNAP 在线** |
 
 ## QNAP TS-264C `jonas` (192.168.8.10) — ✅ 已只读核实 2026-05-30
 
@@ -86,6 +104,7 @@ status: unverified
 - 新增一个对外内网服务通常要同时动三处：**部署(1Panel/docker) → NPM(反代+证书) → AdGuardHome(解析)**。→ 未来 `publish-service` skill。
 - 内网 DNS 依赖 AdGuardHome（在 .15）；**.15 宕机会影响全网解析**。
 - 全家翻墙依赖 Mac mini Surge 网关；**动它可能全网断代理**。
+- **PVE → QNAP**：PVE 的 `qnap_ssd` 存储是挂自 QNAP 的 NFS；**QNAP 宕机 / 重启会影响 PVE 上用该存储的 VM**（含常开的 fnOS）。
 
 ## TODO
 
