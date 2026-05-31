@@ -31,7 +31,7 @@ status: unverified
 | zigbee2mqtt | :8080 | Zigbee 网关 |
 | z2m-mqtt (mosquitto) | :1883 | MQTT broker |
 | matter-server | host net | Matter |
-| scrypted | host net | 摄像头/NVR |
+| scrypted | host net | 摄像头/NVR。server **0.143.0**（2026-05-31 升级自 0.137）；镜像 `ghcr.io/koush/scrypted:lite`（原 `1ms.run` 源已失效）。⚠ lite 无 Python/ML → OpenVINO 物体检测插件无法加载；要用 N100 核显做检测需改 `:intel` 变体（透传 /dev/dri）。无 Watchtower，手动升级 |
 | node-red | host net | 自动化流 |
 
 > Zigbee 设备清单（33 个 + 协调器）见 [`inventory/iot.md`](iot.md)。
