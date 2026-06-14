@@ -1,8 +1,8 @@
 ---
-last_verified: 2026-05-30
-verified_by: human
-source: "用户对话补充（2026-05-30），未经核实"
-status: unverified
+last_verified: 2026-06-14
+verified_by: ai
+source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony）"
+status: partial
 ---
 
 # 服务清单（services）
@@ -19,6 +19,7 @@ status: unverified
 |---|---|---|---|
 | Nginx Proxy Manager | :80 :81 :443 | 反向代理 + 泛域名 LE | `*.jsho.top` 反代入口 |
 | AdGuardHome | :53(DNS) :3003(admin) :8443 :853 | 私有 DNS | 全网解析依赖；`*.jsho.top`→内网 |
+| homelab-ntp | :123/udp | 内网 NTP | 系统级 `chrony.service`，监听 `192.168.8.15:123/udp`，允许 `192.168.8.0/24`；Docker 版已清理 |
 | ddns-go | host net | 动态 DNS | `portal.jsho.top`→家庭公网 IP |
 | v2fly | :13142 | vmess 加密代理回家 | **公网暴露面** |
 | **wg-easy (WireGuard)** | :60085/tcp :60086/udp | **VPN 入内网** | ⚠ 新发现的第三条远程接入通道 |
