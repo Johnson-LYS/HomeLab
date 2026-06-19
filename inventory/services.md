@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-06-14
+last_verified: 2026-06-18
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）"
+source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理）"
 status: partial
 ---
 
@@ -58,6 +58,8 @@ status: partial
 | new-api | :30001 | AI API 网关 |
 | bark-server | :8787 | 推送通知（可用于告警） |
 | 基础: postgres15 / redis | 内部 | 多服务依赖 |
+
+> 哪吒 agent：2026-06-18 已从 n100 移除；本机 Mac mini 与 QNAP `jonas` 未发现哪吒探针。
 
 > 1Panel 本体管理端口尚未在 docker 列表体现（1Panel 自身非容器或用别的端口），待确认。
 > 完整端口与随机高位端口（21064-21101 等，疑 HA/HomeKit/matter）未逐一登记。

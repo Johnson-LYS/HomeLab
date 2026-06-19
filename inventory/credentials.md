@@ -1,8 +1,8 @@
 ---
-last_verified: 2026-05-30
-verified_by: human
-source: "结构占位，待建立 1Password 条目后填充引用"
-status: placeholder
+last_verified: 2026-06-18
+verified_by: ai
+source: "结构占位（2026-05-30）+ AI 只读核实 HomeLab vault 条目（2026-06-18，op item list / field labels only）"
+status: partial
 ---
 
 # 凭证引用映射（credentials）
@@ -24,13 +24,14 @@ status: placeholder
 |---|---|---|
 | 主路由管理后台 | `op://HomeLab/kaxaao54c3iiibcwjd4wx2ehcm/password` | 中文条目「主路由管理密码」，仅密码登录；用 item-id 引用 |
 | Nginx Proxy Manager | `op://HomeLab/Nginx Proxy Manager/password` | 用户已录入（ASCII 名，可直接用）|
+| 联想百应 n100 系统账户 | `op://HomeLab/n100/password` | 字段标签已核实；用于 sudo 时只运行时解析，不打印 |
 | SSH 私钥 | `op://HomeLab/Johnson (Ed25519)` | 1Password SSH Agent 使用 |
 
 ## 引用表（待填充 — 现为占位）
 
 | 用途 | 类型 | op:// 引用（占位） | 暴露级别 | 状态 |
 |---|---|---|---|---|
-| 联想百应 系统账户 | SSH/登录 | 走 1Password SSH Agent | 内网/认证链路 P1 | TODO |
+| 联想百应 系统账户 | SSH/登录/sudo | `op://HomeLab/n100/password` + 1Password SSH Agent | 内网/认证链路 P1 | 已录入 |
 | 1Panel 后台 | web | `op://HomeLab/1panel/password` | 公网邻接 P0 | 待录入 |
 | PVE root | web/ssh | `op://HomeLab/pve/password` | 公网邻接 P0 | 待录入 |
 | QNAP 管理 | web | `op://HomeLab/qnap/password` | 公网邻接 P0 | 待录入 |
