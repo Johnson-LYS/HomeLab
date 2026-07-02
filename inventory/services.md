@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-06-18
+last_verified: 2026-07-02
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理）"
+source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top）"
 status: partial
 ---
 
@@ -45,6 +45,7 @@ status: partial
 | freshrss | :1236 | RSS |
 | homepage | :3006 | 导航页 |
 | sun-panel | :3002 | 导航页 |
+| ham-a-exam-trainer | :18080 | 业余无线电 A 证刷题静态站点；Docker 容器 `ham-a-exam-trainer`；站点目录 `/home/johnson/sites/ham-a-exam-trainer/www`；NPM 待配置反代 |
 
 ### 自动化 / 数据 / 监控 / AI
 | 服务 | 端口 | 作用 |
