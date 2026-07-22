@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.jsho.homelab.screen-sharing-control</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/env</string>
+    <string>python3</string>
+    <string>/Users/liyongsheng/Library/Application Support/HomeLabScreenSharingControl/server.py</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOMELAB_SCREEN_SHARING_HOST</key>
+    <string>192.168.8.18</string>
+    <key>HOMELAB_SCREEN_SHARING_PORT</key>
+    <string>18765</string>
+    <key>HOMELAB_SCREEN_SHARING_TOKEN_FILE</key>
+    <string>/Users/liyongsheng/Library/Application Support/HomeLabScreenSharingControl/token</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/liyongsheng/Library/Logs/HomeLabScreenSharingControl.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/liyongsheng/Library/Logs/HomeLabScreenSharingControl.err.log</string>
+</dict>
+</plist>

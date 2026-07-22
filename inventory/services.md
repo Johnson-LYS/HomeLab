@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-07-02
+last_verified: 2026-07-22
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top）"
+source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4 与 TeslaMate 栈升级）"
 status: partial
 ---
 
@@ -54,8 +54,8 @@ status: partial
 | qinglong | :5700 | 定时脚本面板 |
 | nocodb | :8081 | 无代码数据库 |
 | monitor: grafana / prometheus | :3000 / :9090 | 监控（AI 运维可复用） |
-| database-postgres (pg17) | :5432 | 共享数据库 |
-| teslamate (+grafana/api) | :4000 / :3004 / :8082 | 特斯拉行车记录 |
+| database-postgres (pg18) | :5432 | 共享数据库；PostgreSQL **18.4**，承载 Home Assistant / NocoDB / TeslaMate；生产卷 `database_postgres18-data`，旧 PG17 卷保留用于回滚 |
+| teslamate (+grafana/api) | :4000 / :3004 / :8082 | 特斯拉行车记录；TeslaMate/Grafana **4.0.1**，TeslaMateAPI **1.25.0** |
 | new-api | :30001 | AI API 网关 |
 | bark-server | :8787 | 推送通知（可用于告警） |
 | 基础: postgres15 / redis | 内部 | 多服务依赖 |
@@ -105,6 +105,7 @@ LXC：`moltbot`(10001, stopped)。
 |---|---|---|
 | Surge（增强模式） | 科学上网 + **VM 网关模式** | 作为其它设备网关提供翻墙 |
 | Claude Code / Codex | **运维中枢** | 本仓库工作目录 |
+| screen-sharing-control | :18765/tcp 关闭本机 `Screen Sharing.app` 的内网 HTTP 控制服务 | 用户 `launchd` 服务 `com.jsho.homelab.screen-sharing-control`；监听 `192.168.8.18:18765`；要求 bearer token；token 仅在 Mac mini 本地 `~/Library/Application Support/HomeLabScreenSharingControl/token`，不入库；不使用 Docker |
 
 ## 依赖关系（关键）
 
