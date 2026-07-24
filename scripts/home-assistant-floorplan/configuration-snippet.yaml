@@ -1,0 +1,13 @@
+# 将下面内容合并到 /config/configuration.yaml。
+# 如果 configuration.yaml 已经有 lovelace:，只合并 dashboards: 下的内容，
+# 不要再创建第二个 lovelace: 顶级键。
+
+lovelace:
+  dashboards:
+    xiangshan-floorplan:
+      mode: yaml
+      filename: floorplan-dashboard.yaml
+      title: 香山府
+      icon: mdi:floor-plan
+      show_in_sidebar: true
+      require_admin: false

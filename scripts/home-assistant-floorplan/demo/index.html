@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#11161d">
+  <title>香山府 · 灯光控制演练</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --accent: #ffd276;
+      --accent-strong: #ffb938;
+      --panel: rgba(18, 23, 30, 0.86);
+      --line: rgba(255, 255, 255, 0.09);
+      --muted: #8e98a7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100svh;
+      margin: 0;
+      background:
+        radial-gradient(circle at 50% 12%, rgba(58, 67, 79, 0.24), transparent 42rem),
+        #0d1117;
+      color: #f5f7fa;
+    }
+
+    button { font: inherit; }
+
+    .app {
+      width: min(100%, 1180px);
+      margin: 0 auto;
+      padding: clamp(14px, 2.6vw, 30px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      margin: 0 0 3px;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(20px, 3vw, 30px);
+      font-weight: 720;
+      letter-spacing: -.03em;
+    }
+
+    .summary {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .master-actions {
+      display: flex;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .master-button {
+      min-height: 40px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.055);
+      color: #dce1e8;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .master-button.primary {
+      border-color: rgba(255, 210, 118, .38);
+      background: rgba(255, 197, 79, .13);
+      color: #ffe6b2;
+    }
+
+    .master-button:hover { background: rgba(255,255,255,.1); }
+    .master-button:active { transform: scale(.97); }
+
+    .floorplan-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(15, 20, 27, .78);
+      box-shadow: 0 24px 80px rgba(0,0,0,.34);
+    }
+
+    .canvas {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      isolation: isolate;
+      overflow: hidden;
+      background: #626262;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .floorplan-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .42s cubic-bezier(.2,.75,.25,1);
+    }
+
+    .floorplan-layer.base { opacity: 1; z-index: 0; }
+    .floorplan-layer.room { z-index: 1; }
+    .floorplan-layer.light-spill {
+      z-index: 2;
+      mix-blend-mode: screen;
+    }
+    .floorplan-layer.is-on { opacity: 1; }
+
+    .room-control {
+      --x: 50%;
+      --y: 50%;
+      position: absolute;
+      z-index: 4;
+      left: var(--x);
+      top: var(--y);
+      display: grid;
+      place-items: center;
+      width: clamp(34px, 4.5vw, 50px);
+      aspect-ratio: 1;
+      padding: 0;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 50%;
+      background: rgba(17, 23, 31, .73);
+      color: rgba(245,247,250,.76);
+      box-shadow: 0 5px 18px rgba(0,0,0,.28);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      cursor: pointer;
+      transition: transform .16s ease, background .25s ease, color .25s ease, box-shadow .25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .room-control::before {
+      content: "";
+      width: 42%;
+      height: 42%;
+      border: 2px solid currentColor;
+      border-radius: 50% 50% 46% 46%;
+      box-shadow: inset 0 -3px 0 -1px currentColor;
+    }
+
+    .room-control::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 5px);
+      width: max-content;
+      max-width: 86px;
+      padding: 3px 7px;
+      transform: translateX(-50%);
+      border-radius: 7px;
+      background: rgba(13,17,23,.72);
+      color: rgba(255,255,255,.78);
+      font-size: clamp(9px, 1.1vw, 12px);
+      line-height: 1.2;
+      text-shadow: 0 1px 4px #000;
+      pointer-events: none;
+    }
+
+    .room-control:hover { transform: translate(-50%, -50%) scale(1.08); }
+    .room-control:active { transform: translate(-50%, -50%) scale(.93); }
+    .room-control:focus-visible { outline: 3px solid rgba(255,210,118,.7); outline-offset: 3px; }
+    .room-control[aria-pressed="true"] {
+      border-color: rgba(255,220,145,.9);
+      background: rgba(255, 190, 63, .9);
+      color: #fff9e8;
+      box-shadow: 0 0 0 5px rgba(255,196,73,.13), 0 0 28px rgba(255,187,54,.66);
+    }
+
+    .room-control[aria-pressed="true"]::after {
+      color: #fff5dc;
+      background: rgba(76,55,20,.82);
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 13px 17px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-strong);
+      box-shadow: 0 0 10px rgba(255,185,56,.8);
+    }
+
+    @media (max-width: 640px) {
+      .topbar { align-items: flex-end; }
+      .summary { display: none; }
+      .master-button { min-height: 36px; padding: 0 11px; font-size: 12px; }
+      .room-control::after { display: none; }
+      .footer { padding: 10px 12px; }
+      .footer > span:last-child { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Home Assistant Preview</p>
+        <h1>香山府 · 灯光控制</h1>
+        <p class="summary" id="summary" aria-live="polite">全部灯光已关闭</p>
+      </div>
+      <div class="master-actions" aria-label="全屋灯光快捷控制">
+        <button class="master-button" type="button" data-scene="off">全部关闭</button>
+        <button class="master-button primary" type="button" data-scene="on">全部打开</button>
+      </div>
+    </header>
+
+    <section class="floorplan-card" aria-label="香山府户型灯光控制面板">
+      <div class="canvas" id="floorplan">
+        <img class="floorplan-layer base" src="../www/floorplan/base.png" alt="香山府三维户型图">
+
+        <!-- 普通 PNG：透明区域直接覆盖。 -->
+        <img class="floorplan-layer room" id="layer-master-bedroom" src="../www/floorplan/master-bedroom-on.png" alt="">
+        <img class="floorplan-layer room" id="layer-master-bathroom" src="../www/floorplan/master-bathroom-on.png" alt="">
+        <img class="floorplan-layer room" id="layer-kitchen" src="../www/floorplan/kitchen-on.png" alt="">
+        <img class="floorplan-layer room" id="layer-second-bathroom" src="../www/floorplan/second-bathroom-on.png" alt="">
+        <img class="floorplan-layer room" id="layer-second-bedroom" src="../www/floorplan/second-bedroom-on.png" alt="">
+        <img class="floorplan-layer room" id="layer-study" src="../www/floorplan/study-on.png" alt="">
+
+        <!-- 黑底光照贡献图：screen 混合可保留交叉区域的叠加亮度。 -->
+        <img class="floorplan-layer light-spill" id="layer-balcony" src="../www/floorplan/balcony-screen.png" alt="">
+        <img class="floorplan-layer light-spill" id="layer-living-room" src="../www/floorplan/living-room-screen.png" alt="">
+        <img class="floorplan-layer light-spill" id="layer-dining-room" src="../www/floorplan/dining-room-screen.png" alt="">
+        <img class="floorplan-layer light-spill" id="layer-entry" src="../www/floorplan/entry-screen.png" alt="">
+        <img class="floorplan-layer light-spill" id="layer-washstand" src="../www/floorplan/washstand-screen.png" alt="">
+
+        <button class="room-control" style="--x:29.5%;--y:30%" data-target="master-bedroom" data-label="主卧" data-entity="light.master_bedroom" aria-label="主卧灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:45.2%;--y:25%" data-target="master-bathroom" data-label="主卫" data-entity="light.master_bathroom" aria-label="主卫灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:55.7%;--y:33%" data-target="kitchen" data-label="厨房" data-entity="light.kitchen" aria-label="厨房灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:65.7%;--y:28%" data-target="second-bathroom" data-label="次卫" data-entity="light.second_bathroom" aria-label="次卫灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:79.8%;--y:32%" data-target="second-bedroom" data-label="次卧" data-entity="light.second_bedroom" aria-label="次卧灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:81.7%;--y:61%" data-target="study" data-label="书房" data-entity="light.study" aria-label="书房灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:13.5%;--y:69%" data-target="balcony" data-label="阳台" data-entity="light.balcony" aria-label="阳台灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:31.3%;--y:70%" data-target="living-room" data-label="客厅" data-entity="light.living_room" aria-label="客厅灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:49.8%;--y:63%" data-target="dining-room" data-label="餐厅" data-entity="light.dining_room" aria-label="餐厅灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:61.8%;--y:59%" data-target="entry" data-label="玄关" data-entity="light.entry" aria-label="玄关灯" aria-pressed="false"></button>
+        <button class="room-control" style="--x:66.2%;--y:44%" data-target="washstand" data-label="洗手台" data-entity="light.washstand" aria-label="洗手台灯" aria-pressed="false"></button>
+      </div>
+      <footer class="footer">
+        <span class="legend"><i class="legend-dot"></i><span id="count">0 / 11 盏灯已开启</span></span>
+        <span>点击户型内按钮切换灯光</span>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    const controls = [...document.querySelectorAll(".room-control")];
+    const summary = document.querySelector("#summary");
+    const count = document.querySelector("#count");
+
+    function setLight(control, isOn, emit = true) {
+      const layer = document.querySelector(`#layer-${control.dataset.target}`);
+      control.setAttribute("aria-pressed", String(isOn));
+      layer.classList.toggle("is-on", isOn);
+
+      if (emit) {
+        window.dispatchEvent(new CustomEvent("floorplan-light-change", {
+          detail: { entityId: control.dataset.entity, state: isOn ? "on" : "off" }
+        }));
+      }
+    }
+
+    function refreshSummary() {
+      const on = controls.filter(control => control.getAttribute("aria-pressed") === "true").length;
+      count.textContent = `${on} / ${controls.length} 盏灯已开启`;
+      summary.textContent = on === 0
+        ? "全部灯光已关闭"
+        : on === controls.length
+          ? "全屋灯光已打开"
+          : `${on} 个区域正在照明`;
+    }
+
+    controls.forEach(control => {
+      control.addEventListener("click", () => {
+        setLight(control, control.getAttribute("aria-pressed") !== "true");
+        refreshSummary();
+      });
+    });
+
+    document.querySelectorAll("[data-scene]").forEach(button => {
+      button.addEventListener("click", () => {
+        const isOn = button.dataset.scene === "on";
+        controls.forEach(control => setLight(control, isOn));
+        refreshSummary();
+      });
+    });
+
+    // 后续接入 HA 时，可由卡片代码调用此方法同步 entity 状态。
+    window.setFloorplanEntityState = (entityId, state) => {
+      const control = controls.find(item => item.dataset.entity === entityId);
+      if (!control) return false;
+      setLight(control, state === "on", false);
+      refreshSummary();
+      return true;
+    };
+  </script>
+</body>
+</html>

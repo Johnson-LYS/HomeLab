@@ -1,0 +1,82 @@
+# 合并到 /config/configuration.yaml。
+# 玄关 light.entry 和阳台 light.balcony 是单灯，不需要创建组。
+#
+# 下面 9 个组均保持 all: false：
+# 任意成员开启时，组状态就是 on；对组执行关闭会关闭所有成员。
+# 请把 entities 下的示例 ID 替换为实际灯具，并按需要增删成员。
+
+light:
+  - platform: group
+    name: Master Bedroom
+    unique_id: xiangshan_master_bedroom_group
+    all: false
+    entities:
+      - light.master_bedroom_ceiling
+      - light.master_bedroom_spotlights
+      - light.master_bedroom_bedside
+
+  - platform: group
+    name: Master Bathroom
+    unique_id: xiangshan_master_bathroom_group
+    all: false
+    entities:
+      - light.master_bathroom_ceiling
+      - light.master_bathroom_mirror
+
+  - platform: group
+    name: Kitchen
+    unique_id: xiangshan_kitchen_group
+    all: false
+    entities:
+      - light.kitchen_ceiling
+      - light.kitchen_counter
+
+  - platform: group
+    name: Second Bathroom
+    unique_id: xiangshan_second_bathroom_group
+    all: false
+    entities:
+      - light.second_bathroom_ceiling
+      - light.second_bathroom_mirror
+
+  - platform: group
+    name: Second Bedroom
+    unique_id: xiangshan_second_bedroom_group
+    all: false
+    entities:
+      - light.second_bedroom_ceiling
+      - light.second_bedroom_bedside
+
+  - platform: group
+    name: Study
+    unique_id: xiangshan_study_group
+    all: false
+    entities:
+      - light.study_ceiling
+      - light.study_desk
+      - light.study_bookshelf
+
+  - platform: group
+    name: Living Room
+    unique_id: xiangshan_living_room_group
+    all: false
+    entities:
+      - light.living_room_ceiling
+      - light.living_room_spotlights
+      - light.living_room_light_strip
+
+  - platform: group
+    name: Dining Room
+    unique_id: xiangshan_dining_room_group
+    all: false
+    entities:
+      - light.dining_room_pendant
+      - light.dining_room_spotlights
+
+  - platform: group
+    name: Washstand
+    unique_id: xiangshan_washstand_group
+    all: false
+    entities:
+      - light.washstand_mirror
+      - light.washstand_spotlight

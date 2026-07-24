@@ -1,0 +1,652 @@
+# 香山府 Home Assistant 户型灯光面板
+#
+# 主卧、主卫、厨房、次卫、次卧、书房、客厅、餐厅和洗手台绑定灯光组。
+# 这些组由 light-groups-snippet.yaml 创建；任意成员开启时，组状态即为 on。
+# 玄关 light.entry 与阳台 light.balcony 直接绑定单灯。
+#
+# 单击房间按钮：切换整个房间灯光组。
+# 长按多灯房间：进入同一 Dashboard 内的单灯子页面。
+# 长按玄关/阳台：打开该单灯的更多信息。
+
+views:
+  - title: 香山府
+    path: home
+    icon: mdi:floor-plan
+    type: panel
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: button
+                name: 全部关闭
+                icon: mdi:lightbulb-group-off-outline
+                show_state: false
+                tap_action:
+                  action: perform-action
+                  perform_action: light.turn_off
+                  target:
+                    entity_id:
+                      - light.master_bedroom
+                      - light.master_bathroom
+                      - light.kitchen
+                      - light.second_bathroom
+                      - light.second_bedroom
+                      - light.study
+                      - light.balcony
+                      - light.living_room
+                      - light.dining_room
+                      - light.entry
+                      - light.washstand
+              - type: button
+                name: 全部打开
+                icon: mdi:lightbulb-group
+                show_state: false
+                tap_action:
+                  action: perform-action
+                  perform_action: light.turn_on
+                  target:
+                    entity_id:
+                      - light.master_bedroom
+                      - light.master_bathroom
+                      - light.kitchen
+                      - light.second_bathroom
+                      - light.second_bedroom
+                      - light.study
+                      - light.balcony
+                      - light.living_room
+                      - light.dining_room
+                      - light.entry
+                      - light.washstand
+
+          - type: picture-elements
+            title: 香山府灯光
+            image: /local/floorplan/base.png
+            elements:
+              # 普通透明房间图层
+              - type: image
+                entity: light.master_bedroom
+                title: null
+                image: /local/floorplan/master-bedroom-on.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  z-index: 1
+
+              - type: image
+                entity: light.master_bathroom
+                title: null
+                image: /local/floorplan/master-bathroom-on.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  z-index: 1
+
+              - type: image
+                entity: light.kitchen
+                title: null
+                image: /local/floorplan/kitchen-on.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  z-index: 1
+
+              - type: image
+                entity: light.second_bathroom
+                title: null
+                image: /local/floorplan/second-bathroom-on.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  z-index: 1
+
+              - type: image
+                entity: light.second_bedroom
+                title: null
+                image: /local/floorplan/second-bedroom-on.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  z-index: 1
+
+              - type: image
+                entity: light.study
+                title: null
+                image: /local/floorplan/study-on.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  z-index: 1
+
+              # 线性减淡图层：screen 混合能保留交叉光并累加亮度
+              - type: image
+                entity: light.balcony
+                title: null
+                image: /local/floorplan/balcony-screen.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  mix-blend-mode: screen
+                  z-index: 2
+
+              - type: image
+                entity: light.living_room
+                title: null
+                image: /local/floorplan/living-room-screen.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  mix-blend-mode: screen
+                  z-index: 2
+
+              - type: image
+                entity: light.dining_room
+                title: null
+                image: /local/floorplan/dining-room-screen.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  mix-blend-mode: screen
+                  z-index: 2
+
+              - type: image
+                entity: light.entry
+                title: null
+                image: /local/floorplan/entry-screen.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  mix-blend-mode: screen
+                  z-index: 2
+
+              - type: image
+                entity: light.washstand
+                title: null
+                image: /local/floorplan/washstand-screen.png
+                filter: none
+                state_filter:
+                  "on": opacity(1)
+                  "off": opacity(0)
+                  unavailable: opacity(0)
+                  unknown: opacity(0)
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  transform: translate(-50%, -50%)
+                  pointer-events: none
+                  mix-blend-mode: screen
+                  z-index: 2
+
+              # 房间控制按钮。单击开关，长按打开灯具详情/亮度调节。
+              - type: state-icon
+                entity: light.master_bedroom
+                title: 主卧
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action:
+                  action: navigate
+                  navigation_path: /xiangshan-floorplan/master-bedroom
+                style:
+                  left: 29.5%
+                  top: 30%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.master_bathroom
+                title: 主卫
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action:
+                  action: navigate
+                  navigation_path: /xiangshan-floorplan/master-bathroom
+                style:
+                  left: 45.2%
+                  top: 25%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.kitchen
+                title: 厨房
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action:
+                  action: navigate
+                  navigation_path: /xiangshan-floorplan/kitchen
+                style:
+                  left: 55.7%
+                  top: 33%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.second_bathroom
+                title: 次卫
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action:
+                  action: navigate
+                  navigation_path: /xiangshan-floorplan/second-bathroom
+                style:
+                  left: 65.7%
+                  top: 28%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.second_bedroom
+                title: 次卧
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action:
+                  action: navigate
+                  navigation_path: /xiangshan-floorplan/second-bedroom
+                style:
+                  left: 79.8%
+                  top: 32%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.study
+                title: 书房
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action:
+                  action: navigate
+                  navigation_path: /xiangshan-floorplan/study
+                style:
+                  left: 81.7%
+                  top: 61%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.balcony
+                title: 阳台
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action: { action: more-info }
+                style:
+                  left: 13.5%
+                  top: 69%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.living_room
+                title: 客厅
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action:
+                  action: navigate
+                  navigation_path: /xiangshan-floorplan/living-room
+                style:
+                  left: 31.3%
+                  top: 70%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.dining_room
+                title: 餐厅
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action:
+                  action: navigate
+                  navigation_path: /xiangshan-floorplan/dining-room
+                style:
+                  left: 49.8%
+                  top: 63%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.entry
+                title: 玄关
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action: { action: more-info }
+                style:
+                  left: 61.8%
+                  top: 59%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+              - type: state-icon
+                entity: light.washstand
+                title: 洗手台
+                icon: mdi:lightbulb
+                state_color: true
+                tap_action: { action: toggle }
+                hold_action:
+                  action: navigate
+                  navigation_path: /xiangshan-floorplan/washstand
+                style:
+                  left: 66.2%
+                  top: 44%
+                  z-index: 3
+                  background: rgba(18, 24, 32, 0.78)
+                  border-radius: 50%
+                  padding: 10px
+
+  # 以下是同一 Dashboard 内的房间子页面。
+  # 灯具数量不一致时，可按实际情况增删 tile。
+  - title: 主卧灯光
+    path: master-bedroom
+    subview: true
+    back_path: /xiangshan-floorplan/home
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: light.master_bedroom_ceiling
+            name: 主灯
+          - type: tile
+            entity: light.master_bedroom_spotlights
+            name: 射灯
+          - type: tile
+            entity: light.master_bedroom_bedside
+            name: 床头灯
+
+  - title: 主卫灯光
+    path: master-bathroom
+    subview: true
+    back_path: /xiangshan-floorplan/home
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: light.master_bathroom_ceiling
+            name: 主灯
+          - type: tile
+            entity: light.master_bathroom_mirror
+            name: 镜前灯
+
+  - title: 厨房灯光
+    path: kitchen
+    subview: true
+    back_path: /xiangshan-floorplan/home
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: light.kitchen_ceiling
+            name: 主灯
+          - type: tile
+            entity: light.kitchen_counter
+            name: 操作台灯
+
+  - title: 次卫灯光
+    path: second-bathroom
+    subview: true
+    back_path: /xiangshan-floorplan/home
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: light.second_bathroom_ceiling
+            name: 主灯
+          - type: tile
+            entity: light.second_bathroom_mirror
+            name: 镜前灯
+
+  - title: 次卧灯光
+    path: second-bedroom
+    subview: true
+    back_path: /xiangshan-floorplan/home
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: light.second_bedroom_ceiling
+            name: 主灯
+          - type: tile
+            entity: light.second_bedroom_bedside
+            name: 床头灯
+
+  - title: 书房灯光
+    path: study
+    subview: true
+    back_path: /xiangshan-floorplan/home
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: light.study_ceiling
+            name: 主灯
+          - type: tile
+            entity: light.study_desk
+            name: 书桌灯
+          - type: tile
+            entity: light.study_bookshelf
+            name: 书柜灯
+
+  - title: 客厅灯光
+    path: living-room
+    subview: true
+    back_path: /xiangshan-floorplan/home
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: light.living_room_ceiling
+            name: 主灯
+          - type: tile
+            entity: light.living_room_spotlights
+            name: 射灯
+          - type: tile
+            entity: light.living_room_light_strip
+            name: 灯带
+
+  - title: 餐厅灯光
+    path: dining-room
+    subview: true
+    back_path: /xiangshan-floorplan/home
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: light.dining_room_pendant
+            name: 吊灯
+          - type: tile
+            entity: light.dining_room_spotlights
+            name: 射灯
+
+  - title: 洗手台灯光
+    path: washstand
+    subview: true
+    back_path: /xiangshan-floorplan/home
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: light.washstand_mirror
+            name: 镜前灯
+          - type: tile
+            entity: light.washstand_spotlight
+            name: 射灯
