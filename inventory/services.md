@@ -1,7 +1,7 @@
 ---
 last_verified: 2026-08-02
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4 与 TeslaMate 栈升级；2026-08-01，部署 dashboard-ha release 20260801-211049；2026-08-02，修复私网 HTTP 配置并更新到 release 20260802-175138）"
+source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4 与 TeslaMate 栈升级；2026-08-01，部署 dashboard-ha release 20260801-211049；2026-08-02，修复私网 HTTP 配置并更新到 release 20260802-175138，增加 iPad Safari 弹层动效兼容并更新到 release 20260802-185540）"
 status: partial
 ---
 
@@ -35,7 +35,7 @@ status: partial
 | scrypted | host net | 摄像头/NVR。server **0.143.0**（2026-05-31 升级自 0.137）；镜像 `ghcr.io/koush/scrypted:lite`（原 `1ms.run` 源已失效）。⚠ lite 无 Python/ML → OpenVINO 物体检测插件无法加载；要用 N100 核显做检测需改 `:intel` 变体（透传 /dev/dri）。无 Watchtower，手动升级 |
 | go2rtc | :1984 :8554 :8555/tcp+udp | 摄像头流网关 / restream。1Panel compose: `/opt/1panel/docker/compose/go2rtc`；配置 `data/go2rtc.yaml`；无独立 backup sidecar，依赖 1Panel 系统快照备份打包 compose 目录 |
 | node-red | host net | 自动化流 |
-| dashboard-ha | :18081 | 墙面 iPad Home Assistant Web/PWA 控制面；容器 `dashboard-ha`；镜像 `dashboard-ha:20260802-175138`；Compose `/opt/1panel/docker/compose/dashboard-ha/compose.yaml`；仅内网直连，尚未配置 NPM/DNS |
+| dashboard-ha | :18081 | 墙面 iPad Home Assistant Web/PWA 控制面；容器 `dashboard-ha`；镜像 `dashboard-ha:20260802-185540`；Compose `/opt/1panel/docker/compose/dashboard-ha/compose.yaml`；仅内网直连，尚未配置 NPM/DNS |
 
 > Zigbee 设备清单（33 个 + 协调器）见 [`inventory/iot.md`](iot.md)。
 
