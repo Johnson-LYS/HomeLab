@@ -1,8 +1,8 @@
 ---
-last_verified: 2026-05-30
-verified_by: human
-source: "用户对话补充（2026-05-30），未经核实"
-status: unverified
+last_verified: 2026-08-14
+verified_by: ai
+source: "用户对话补充（2026-05-30）+ FRP 公网路径端到端核实（2026-08-14）"
+status: partial
 ---
 
 # 网络拓扑与 IP（network）
@@ -83,6 +83,16 @@ status: unverified
 - 主域名：`jsho.top`
 - 公网入口：`portal.jsho.top`（ddns-go 动态解析到家庭公网 IP）
 - 内网服务：`*.jsho.top`，由 AdGuardHome 解析到内网，Nginx Proxy Manager 反代 + 泛域名 Let's Encrypt。
+
+### 阿里云 FRP 入口（2026-08-14 实测）
+
+| 公网地址 | 协议 | 目标 | 用途 |
+|---|---|---|---|
+| `8.138.130.141:7000` | TCP + TLS | `ali99` 的 `frps` | `server`（192.168.8.131）主动出站建立 FRP 控制通道 |
+| `8.138.130.141:13122` | TCP | `server` 的 `127.0.0.1:22` | 公网 SSH 入口；仅 SSH 密钥认证 |
+
+- 家庭主路由未新增端口转发；该链路不依赖 NAT 打洞。
+- `frps` 的 `allowPorts` 仅允许远端代理端口 `13122`。
 
 ### 公网入站暴露面（主路由实测 2026-05-30，无头浏览器只读）
 

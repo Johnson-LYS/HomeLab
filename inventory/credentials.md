@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-06-18
+last_verified: 2026-08-14
 verified_by: ai
-source: "结构占位（2026-05-30）+ AI 只读核实 HomeLab vault 条目（2026-06-18，op item list / field labels only）"
+source: "结构占位（2026-05-30）+ AI 只读核实 HomeLab vault 条目（2026-06-18，op item list / field labels only）+ FRP token 创建与引用核实（2026-08-14）"
 status: partial
 ---
 
@@ -25,6 +25,7 @@ status: partial
 | 主路由管理后台 | `op://HomeLab/kaxaao54c3iiibcwjd4wx2ehcm/password` | 中文条目「主路由管理密码」，仅密码登录；用 item-id 引用 |
 | Nginx Proxy Manager | `op://HomeLab/Nginx Proxy Manager/password` | 用户已录入（ASCII 名，可直接用）|
 | 联想百应 n100 系统账户 | `op://HomeLab/n100/password` | 字段标签已核实；用于 sudo 时只运行时解析，不打印 |
+| FRP `ali99` ↔ `server/.131` | `op://HomeLab/frp-ali99-131/password` | 随机 64 字符 token；两端从 1Password 注入到 root 管理、`frp` 用户只读的本地 token 文件 |
 | SSH 私钥 | `op://HomeLab/Johnson (Ed25519)` | 1Password SSH Agent 使用 |
 
 ## 引用表（待填充 — 现为占位）
@@ -32,6 +33,7 @@ status: partial
 | 用途 | 类型 | op:// 引用（占位） | 暴露级别 | 状态 |
 |---|---|---|---|---|
 | 联想百应 系统账户 | SSH/登录/sudo | `op://HomeLab/n100/password` + 1Password SSH Agent | 内网/认证链路 P1 | 已录入 |
+| FRP `ali99` ↔ `server/.131` | token | `op://HomeLab/frp-ali99-131/password` | **公网接入 P0** | 已录入 |
 | 1Panel 后台 | web | `op://HomeLab/1panel/password` | 公网邻接 P0 | 待录入 |
 | PVE root | web/ssh | `op://HomeLab/pve/password` | 公网邻接 P0 | 待录入 |
 | QNAP 管理 | web | `op://HomeLab/qnap/password` | 公网邻接 P0 | 待录入 |
