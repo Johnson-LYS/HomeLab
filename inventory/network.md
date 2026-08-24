@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-08-14
+last_verified: 2026-08-24
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ FRP 公网路径端到端核实（2026-08-14）"
+source: "用户对话补充（2026-05-30）+ FRP 公网路径端到端核实（2026-08-14）+ FMO HTTPS/FRP STCP 公网路径核实（2026-08-24）"
 status: partial
 ---
 
@@ -83,6 +83,7 @@ status: partial
 - 主域名：`jsho.top`
 - 公网入口：`portal.jsho.top`（ddns-go 动态解析到家庭公网 IP）
 - 内网服务：`*.jsho.top`，由 AdGuardHome 解析到内网，Nginx Proxy Manager 反代 + 泛域名 Let's Encrypt。
+- FMO 公网域名：`fmo-companion.bi8syn.com`、`fmo-activity.bi8syn.com`，A 记录均指向 `ali99` (`8.138.130.141`)。
 
 ### 阿里云 FRP 入口（2026-08-14 实测）
 
@@ -93,6 +94,17 @@ status: partial
 
 - 家庭主路由未新增端口转发；该链路不依赖 NAT 打洞。
 - `frps` 的 `allowPorts` 仅允许远端代理端口 `13122`。
+
+### FMO 公网 HTTPS 入口（2026-08-24 实测）
+
+| 公网入口 | `ali99` 处理 | 后端 |
+|---|---|---|
+| `https://fmo-companion.bi8syn.com/privacy/` | 宿主机 Nginx 静态文件 | `/fmo-companion/privacy/index.html` |
+| `https://fmo-activity.bi8syn.com/` | Nginx → `127.0.0.1:18088` | FRP STCP → `192.168.8.131:18088` |
+
+- STCP visitor 仅监听 `ali99:127.0.0.1:18088`，没有新增公网 18088 端口；家庭路由器无需端口转发。
+- 证书由 Let's Encrypt 签发，acme.sh 使用 TLS-ALPN 自动续期；HTTP-01 会被阿里云 `Non-compliance ICP Filing` 页面拦截。
+- 公网浏览器已实测两个 HTTPS 页面正常；80/tcp 仍可能被阿里云备案策略返回 403，客户端应直接使用 HTTPS。
 
 ### 公网入站暴露面（主路由实测 2026-05-30，无头浏览器只读）
 

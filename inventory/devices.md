@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-08-14
+last_verified: 2026-08-24
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ SSH 实连核实（2026-08-12，ali99；2026-08-14，server/.131）"
+source: "用户对话补充（2026-05-30）+ SSH 实连核实（2026-08-12，ali99；2026-08-14，server/.131；2026-08-24，PVE VM 107/ali99/server）"
 status: partial
 ---
 
@@ -36,7 +36,7 @@ status: partial
 | `n100` | 联想百应 NUC | 192.168.8.15 | `johnson` | 22 | `debian-mini` | Debian Linux 6.1.0-37 | ✅ 已连通 2026-05-30 |
 | `jonas` | QNAP | 192.168.8.10 | `Johnson`（大写） | 22 | `Jonas` | QNAP Linux 5.10.60-qnap | ✅ 已连通 2026-05-30 |
 | `ali99` | 阿里云主机 | 8.138.130.141 | `root` | 22 | `iZ7xvdlynshlqdffvudfe2Z` | Debian Linux 6.1.0-31 | ✅ 已连通 2026-08-12；原 TeslaMate 栈已停机保留 |
-| —（直连 IP） | `server` | 192.168.8.131 | `johnson` | 22 | `server` | Debian 13 / x86_64 | ✅ 已连通 2026-08-14；亦可经 `ali99:13122` 的 FRP 入口连接 |
+| —（直连 IP） | `server`（PVE VM 107） | 192.168.8.131 | `johnson` | 22 | `server` | Debian 13 / x86_64 | ✅ 已连通 2026-08-24；亦可经 `ali99:13122` 的 FRP 入口连接；快照 `pre-frp-web-20260824` |
 | —（直连 IP） | 极摩客 PVE | 192.168.8.16 | `root` | 22 | `pve` | PVE 9.1.1 / kernel 6.17 | ✅ 已连通 2026-05-30 |
 | 本机 | Mac mini | 192.168.8.18 | `liyongsheng` | — | — | macOS（本机） | 运维在此本地执行 |
 
