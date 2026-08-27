@@ -116,7 +116,7 @@ LXC：`moltbot`(10001, stopped)。
 |---|---|---|---|
 | FRP Server (`frps`) | `:7000/tcp`（控制）、`:13122/tcp`（代理） | 接收 `server` 的主动连接并公开其 SSH | **v0.69.0**；systemd `frps.service`；配置 `/etc/frp/frps.toml`；强制 TLS、Wire Protocol v2；仅允许代理端口 13122 |
 | FRP STCP Visitor (`frpc-visitor`) | `127.0.0.1:18088` | 私下接入 `server` 的 FMO Activity | **v0.69.0**；systemd `frpc-visitor.service`；配置 `/etc/frp/frpc-visitor.toml`；不新增公网远端端口 |
-| Nginx | `:80/tcp`、`:443/tcp` | FMO 静态页与 Activity 公网 HTTPS 入口 | Debian 原生 **1.22.1**；配置 `/etc/nginx/sites-available/fmo-sites.conf`；统一静态入口 `app.bi8syn.com/fmo-companion/privacy/`，根文件 `/fmo-companion/privacy/index.html`；旧子域名 308 跳转；原 Caddy 容器停机保留 |
+| Nginx | `:80/tcp`、`:443/tcp` | FMO 静态页、SSTV+ 静态页与 Activity 公网 HTTPS 入口 | Debian 原生 **1.22.1**；配置 `/etc/nginx/sites-available/fmo-sites.conf`；FMO 统一静态入口 `app.bi8syn.com/fmo-companion/privacy/`，根文件 `/fmo-companion/privacy/index.html`；SSTV+ 入口 `app.bi8syn.com/sstv-plus/`（308 到 `zh-hans/privacy.html`），根目录 `/sstv-plus/`，含中英隐私政策与支持页共 5 个文件，每文件一段精确匹配 location；旧子域名 308 跳转；原 Caddy 容器停机保留 |
 | acme.sh | systemd timer | Let's Encrypt TLS-ALPN 签发与自动续期 | **v3.1.4**；`acme-fmo-renew.timer` 每日检查；证书覆盖 `app.bi8syn.com`、`fmo-companion.bi8syn.com`、`fmo-activity.bi8syn.com`；因阿里云未备案 HTTP 拦截，不使用 HTTP-01 |
 
 ## `server` (192.168.8.131)
