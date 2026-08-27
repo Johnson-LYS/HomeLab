@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-08-24
+last_verified: 2026-08-27
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4 与 TeslaMate 栈升级；Home Assistant 2026.3.1→2026.7.3；2026-08-12，ali99 TeslaMate 独立迁入 n100；2026-08-14，部署 FRP；2026-08-24，ali99 Nginx/HTTPS 与 FMO Activity FRP STCP）"
+source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4 与 TeslaMate 栈升级；Home Assistant 2026.3.1→2026.7.3；2026-08-12，ali99 TeslaMate 独立迁入 n100；2026-08-14，部署 FRP；2026-08-24，ali99 Nginx/HTTPS 与 FMO Activity FRP STCP；2026-08-27，统一 app.bi8syn.com 路径）"
 status: partial
 ---
 
@@ -115,8 +115,8 @@ LXC：`moltbot`(10001, stopped)。
 |---|---|---|---|
 | FRP Server (`frps`) | `:7000/tcp`（控制）、`:13122/tcp`（代理） | 接收 `server` 的主动连接并公开其 SSH | **v0.69.0**；systemd `frps.service`；配置 `/etc/frp/frps.toml`；强制 TLS、Wire Protocol v2；仅允许代理端口 13122 |
 | FRP STCP Visitor (`frpc-visitor`) | `127.0.0.1:18088` | 私下接入 `server` 的 FMO Activity | **v0.69.0**；systemd `frpc-visitor.service`；配置 `/etc/frp/frpc-visitor.toml`；不新增公网远端端口 |
-| Nginx | `:80/tcp`、`:443/tcp` | FMO 静态页与 Activity 公网 HTTPS 入口 | Debian 原生 **1.22.1**；配置 `/etc/nginx/sites-available/fmo-sites.conf`；静态根目录 `/fmo-companion/privacy`；原容器 `fmo-companion-caddy` 已停机保留 |
-| acme.sh | systemd timer | Let's Encrypt TLS-ALPN 签发与自动续期 | **v3.1.4**；`acme-fmo-renew.timer` 每日检查；证书覆盖 `fmo-companion.bi8syn.com`、`fmo-activity.bi8syn.com`；因阿里云未备案 HTTP 拦截，不使用 HTTP-01 |
+| Nginx | `:80/tcp`、`:443/tcp` | FMO 静态页与 Activity 公网 HTTPS 入口 | Debian 原生 **1.22.1**；配置 `/etc/nginx/sites-available/fmo-sites.conf`；统一静态入口 `app.bi8syn.com/fmo-companion/privacy/`，根文件 `/fmo-companion/privacy/index.html`；旧子域名 308 跳转；原 Caddy 容器停机保留 |
+| acme.sh | systemd timer | Let's Encrypt TLS-ALPN 签发与自动续期 | **v3.1.4**；`acme-fmo-renew.timer` 每日检查；证书覆盖 `app.bi8syn.com`、`fmo-companion.bi8syn.com`、`fmo-activity.bi8syn.com`；因阿里云未备案 HTTP 拦截，不使用 HTTP-01 |
 
 ## `server` (192.168.8.131)
 
