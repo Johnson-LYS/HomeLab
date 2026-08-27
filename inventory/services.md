@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-08-02
+last_verified: 2026-08-03
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4 与 TeslaMate 栈升级；2026-08-01，部署 dashboard-ha release 20260801-211049；2026-08-02，修复私网 HTTP 配置并更新到 release 20260802-175138，增加 iPad Safari 弹层动效兼容并更新到 release 20260802-185540）"
+source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4 与 TeslaMate 栈升级；2026-08-01，部署 dashboard-ha release 20260801-211049；2026-08-02，修复私网 HTTP 配置并更新到 release 20260802-175138，增加 iPad Safari 弹层动效兼容并更新到 release 20260802-185540；2026-08-03，ddns-go 与 n8n 升级）"
 status: partial
 ---
 
@@ -20,7 +20,7 @@ status: partial
 | Nginx Proxy Manager | :80 :81 :443 | 反向代理 + 泛域名 LE | `*.jsho.top` 反代入口 |
 | AdGuardHome | :53(DNS) :3003(admin) :8443 :853 | 私有 DNS | 全网解析依赖；`*.jsho.top`→内网 |
 | homelab-ntp | :123/udp | 内网 NTP | 系统级 `chrony.service`，监听 `192.168.8.15:123/udp`，允许 `192.168.8.0/24`；Docker 版已清理 |
-| ddns-go | host net | 动态 DNS | `portal.jsho.top`→家庭公网 IP |
+| ddns-go | host net | 动态 DNS | **v6.17.4**；Compose `/opt/1panel/docker/compose/portal-network/docker-compose.yml`；`portal.jsho.top`→家庭公网 IP |
 | v2fly | :13142 | vmess 加密代理回家 | **公网暴露面** |
 | **wg-easy (WireGuard)** | :60085/tcp :60086/udp | **VPN 入内网** | ⚠ 新发现的第三条远程接入通道 |
 | sub-store | :3001 | 代理订阅管理 | |
@@ -51,7 +51,7 @@ status: partial
 ### 自动化 / 数据 / 监控 / AI
 | 服务 | 端口 | 作用 |
 |---|---|---|
-| n8n | :5678 | 工作流自动化 |
+| n8n | :5678 | 工作流自动化；**2.30.5**；Compose `/opt/1panel/docker/compose/n8n/docker-compose.yml`；12 个工作流（6 个启用，2026-08-03）；内置 Python task runner 因镜像无 Python 3 未启动，官方建议生产环境使用外部 runner，Web/健康检查正常 |
 | qinglong | :5700 | 定时脚本面板 |
 | nocodb | :8081 | 无代码数据库 |
 | monitor: grafana / prometheus | :3000 / :9090 | 监控（AI 运维可复用） |
