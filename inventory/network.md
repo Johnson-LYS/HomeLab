@@ -132,3 +132,22 @@ status: partial
 - 主路由/网关 IP、各 mesh 节点管理 IP、交换机是否网管型。
 - DHCP 池范围；Apple TV 等 DHCP 设备地址。
 - 防火墙 / 端口转发规则（公网暴露面清单）—— **安全关键，需专门梳理**。
+
+## VMess 接入故障核实（2026-09-27）
+
+```yaml
+last_verified: 2026-09-27
+verified_by: ai
+source: n100 的 Fail2ban/SSH 轮转日志、iptables、容器连通性检查及 Surge 固定 VMess 请求
+```
+
+| 项目 | 已核实事实 |
+|---|---|
+| 容器网络 | v2fly `10.8.8.4`、WireGuard `10.8.8.2`、ADH `10.8.8.3`，同属 `portal-network_adguardhome` |
+| Fail2ban sshd | 检查时 `maxretry=5`、`findtime=300`、`bantime=-1`；INPUT 的所有 TCP 都进入 `f2b-sshd`，不只 SSH |
+| 代理源地址 | 经 VMess 连接 n100 SSH 时，sshd 看到的来源为 `10.8.8.4`，认证失败会导致共享代理出口被封 |
+| SSH 避免多密钥失败 | MacBook 使用 `IdentitiesOnly=yes` 和 `~/.ssh/github-johnson-1password.pub` 指定 Johnson (Ed25519)，签名仍由 1Password Agent 完成；此次未改全局 SSH 配置 |
+| 解封后快照 | 用户手动解封，2026-09-27 11:02 CST 查询 sshd 当前封禁数为 0；固定 VMess 访问两个 HTTPS 域名和 `.15:3006` 均为 200 |
+| 刷新方法 | `sudo fail2ban-client status sshd`、`sudo iptables -S INPUT`、`sudo iptables -S f2b-sshd`；用 Surge 单次请求指定 VMess 复测 |
+
+操作记录：`operations/log/2026/2026-09-27-vmess-fail2ban-unban.md`。
