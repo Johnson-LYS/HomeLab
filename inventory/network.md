@@ -1,7 +1,7 @@
 ---
 last_verified: 2026-10-19
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ FRP 公网路径端到端核实（2026-08-14）+ FMO HTTPS/FRP STCP 公网路径核实（2026-08-24）+ app.bi8syn.com 统一路径核实（2026-08-27）+ 新 FRP 网关/ali99-2 端到端核实（2026-10-19）"
+source: "用户对话补充（2026-05-30）+ FRP 公网路径端到端核实（2026-08-14）+ FMO HTTPS/FRP STCP 公网路径核实（2026-08-24）+ app.bi8syn.com 统一路径核实（2026-08-27）+ 新 FRP 网关/ali99-2 端到端核实及 FMO Trust 公网发布（2026-10-19）"
 status: partial
 ---
 
@@ -101,11 +101,23 @@ status: partial
 |---|---|---|---|
 | `47.109.85.53:7000` | TCP + TLS | `ali99-2` 的 `frps` | `frp`（192.168.8.198）主动建立控制通道 |
 | `ali99-2:127.0.0.1:18000-18099` | TCP，仅回环 | FRP 代理端口池 | 供 `ali99-2` 本机 Nginx 反代未来部署在 n100 的应用 |
+| `ali99-2:127.0.0.1:18090` | TCP，仅回环 | `n100:192.168.8.15:18090` | FMO Trust；客户端片段 `/etc/frp/conf.d/fmo-trust.toml` |
 
 - `frp` 的客户端可将 `192.168.8.15:<应用端口>` 映射到上述回环端口池；家庭路由器无需端口转发。
 - `frps.proxyBindAddr = "127.0.0.1"`，应用映射端口不会直接暴露公网。
 - 控制通道使用 FRP v0.71.1、强制 TLS、Let's Encrypt 证书校验与独立 64 字符 Token；Token 仅从 1Password 投放到两端受限文件。
 - 首次验收曾临时映射 `n100:22` 到 `ali99-2:127.0.0.1:18000`，两端 SSH 主机指纹一致；验收后该代理已停用，18000 不再监听。
+
+### FMO Trust 公网 HTTPS 入口（2026-10-19 实测）
+
+| 公网入口 | `ali99-2` 处理 | 后端行为 |
+|---|---|---|
+| `https://trust.bi8syn.com/` | Nginx TLS → `127.0.0.1:18090` | 保留原始 Host；管理 Web/API；`/` 与 `/readyz` 为 200 |
+| `https://pki.bi8syn.com/` | Nginx TLS → `127.0.0.1:18090` | 保留原始 Host；仅 `/fmo/v1/*` 公共 PKI 路由；根路径及未发布对象为 404 |
+
+- 两个 A 记录均指向 `47.109.85.53`；公共 DNS 解析已核实。
+- 两个域名共用 Certbot/Let's Encrypt ECDSA 证书，SAN 同时包含两者，证书到期日为 2027-01-17；`certbot.timer` 自动续期，deploy hook 校验并 reload Nginx。
+- FMO Trust 仅经 Nginx 80/443 暴露；FRP 应用端口 18090 只在云服务器回环地址监听。
 
 ### FMO 公网 HTTPS 入口（2026-08-27 实测）
 

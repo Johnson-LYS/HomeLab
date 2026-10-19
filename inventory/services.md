@@ -1,7 +1,7 @@
 ---
 last_verified: 2026-10-19
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4、TeslaMate 栈与 Home Assistant 2026.3.1→2026.7.3 升级；2026-08-01，部署 dashboard-ha release 20260801-211049；2026-08-02，修复私网 HTTP 配置并更新到 release 20260802-175138，增加 iPad Safari 弹层动效兼容并更新到 release 20260802-185540；2026-08-03，ddns-go 与 n8n 升级；2026-08-12，ali99 TeslaMate 独立迁入 n100；2026-08-14，部署 FRP；2026-08-24，ali99 Nginx/HTTPS 与 FMO Activity FRP STCP；2026-08-27，统一 app.bi8syn.com 路径；2026-10-19，部署新 FRP 网关与 ali99-2 服务端）"
+source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4、TeslaMate 栈与 Home Assistant 2026.3.1→2026.7.3 升级；2026-08-01，部署 dashboard-ha release 20260801-211049；2026-08-02，修复私网 HTTP 配置并更新到 release 20260802-175138，增加 iPad Safari 弹层动效兼容并更新到 release 20260802-185540；2026-08-03，ddns-go 与 n8n 升级；2026-08-12，ali99 TeslaMate 独立迁入 n100；2026-08-14，部署 FRP；2026-08-24，ali99 Nginx/HTTPS 与 FMO Activity FRP STCP；2026-08-27，统一 app.bi8syn.com 路径；2026-10-19，部署新 FRP 网关与 ali99-2 服务端、发布 FMO Trust 公网 HTTPS）"
 status: partial
 ---
 
@@ -61,6 +61,7 @@ status: partial
 | new-api | :30001 | AI API 网关 |
 | bark-server | :8787 | 推送通知（可用于告警） |
 | 基础: postgres15 / redis | 内部 | 多服务依赖 |
+| FMO Trust | `192.168.8.15:18090` | 6 个容器；管理域名 `trust.bi8syn.com`、公共 PKI 域名 `pki.bi8syn.com`；目录 `/home/johnson/services/fmo-trust`；独立 PostgreSQL 不发布宿主端口；经 `frp` 网关和 `ali99-2` Nginx 暴露 HTTPS；尚未登记管理员 Passkey、未创建生产 CA |
 
 > 哪吒 agent：2026-06-18 已从 n100 移除；本机 Mac mini 与 QNAP `jonas` 未发现哪吒探针。
 
@@ -125,7 +126,7 @@ LXC：`moltbot`(10001, stopped)。
 
 | 服务 | 本地/远端端口 | 作用 | 备注 |
 |---|---|---|---|
-| FRP Client (`frpc`) | 主动连接 `47.109.85.53:7000`；未来把 n100 应用映射到 `18000-18099` | n100 应用统一出网隧道 | **v0.71.1**；systemd `frpc.service` active + enabled；配置 `/etc/frp/frpc.toml`，应用片段 `/etc/frp/conf.d/*.toml`；TLS 校验服务端证书；独立 `frp` 用户 |
+| FRP Client (`frpc`) | 主动连接 `47.109.85.53:7000`；把 n100 应用映射到 `18000-18099` | n100 应用统一出网隧道 | **v0.71.1**；systemd `frpc.service` active + enabled；配置 `/etc/frp/frpc.toml`，应用片段 `/etc/frp/conf.d/*.toml`；FMO Trust 使用 `fmo-trust.toml` 映射 `192.168.8.15:18090` → 远端 18090；TLS 校验服务端证书；独立 `frp` 用户 |
 | zsh / Oh My Zsh | root 登录 shell | 运维交互环境 | zsh **5.9**；Oh My Zsh commit `964ddf789b022b6958b27d02d7fa54f552de21e9`；root 默认 shell `/usr/bin/zsh` |
 
 ## 阿里云主机 `ali99-2` (47.109.85.53)
@@ -133,8 +134,8 @@ LXC：`moltbot`(10001, stopped)。
 | 服务 | 端口 | 作用 | 备注 |
 |---|---|---|---|
 | FRP Server (`frps`) | `:7000/tcp`（控制）、`127.0.0.1:18000-18099`（代理池） | 接收 `frp` 网关连接，为本机 Nginx 提供 n100 应用后端 | **v0.71.1**；systemd `frps.service` active + enabled；配置 `/etc/frp/frps.toml`；强制 TLS、Token 鉴权；`proxyBindAddr=127.0.0.1`；独立 `frp` 用户 |
-| Nginx | `:80`、`:443`、`:8443` | 现有 FMO Link 反代，以及未来应用公网 HTTPS 入口 | Debian 原生 **1.26.3**；本次未重复安装；现有 `fmo-link.bi8syn.com` → `127.0.0.1:8080` 保持不变；配置校验通过 |
-| Certbot | systemd timer | `fmo-link.bi8syn.com` 证书自动续期 | 证书续期后由 `/etc/letsencrypt/renewal-hooks/deploy/20-frps-cert` 同步受限副本并重启 frps 加载新证书 |
+| Nginx | `:80`、`:443`、`:8443` | FMO Link 及 FMO Trust 公网 HTTPS 入口 | Debian 原生 **1.26.3**；`trust.bi8syn.com`、`pki.bi8syn.com` 保留 `$http_host` 并反代 `127.0.0.1:18090`；现有 `fmo-link.bi8syn.com` → `127.0.0.1:8080` 保持不变；配置 `/etc/nginx/sites-available/fmo-trust` 校验通过 |
+| Certbot | systemd timer | `fmo-link.bi8syn.com` 与 FMO Trust 双域名证书自动续期 | FMO Trust ECDSA 证书 SAN 为 `trust.bi8syn.com`、`pki.bi8syn.com`，到期 2027-01-17；`30-nginx-reload` deploy hook；模拟续期成功。`20-frps-cert` 继续只同步 fmo-link 证书给 frps |
 
 ## `server` (192.168.8.131)
 
@@ -151,6 +152,7 @@ LXC：`moltbot`(10001, stopped)。
 - **server → ali99**：`server` 的公网 SSH 入口依赖两端 FRP systemd 服务和 `ali99` 的 TCP 7000/13122 可达；家庭路由器无需端口转发。
 - **FMO Activity → 公网**：`server:18088` → FRP STCP → `ali99:127.0.0.1:18088` → Nginx `fmo-activity.bi8syn.com:443`；18088 不直接暴露公网。
 - **未来 n100 应用 → ali99-2**：`n100:<应用端口>` → `frp` 的 frpc → TLS 控制通道 `ali99-2:7000` → `ali99-2:127.0.0.1:18xxx` → 宿主机 Nginx + 域名 HTTPS；家庭路由器无需端口转发，18xxx 不直接暴露公网。
+- **FMO Trust → 公网**：`n100:18090` → `frp` 的 `fmo-trust.toml` → `ali99-2:127.0.0.1:18090` → Nginx `trust.bi8syn.com` / `pki.bi8syn.com`；原始 Host 保留，数据库无宿主端口且不进入隧道。
 
 ## TODO
 
