@@ -103,3 +103,6 @@ QNAP `jonas`：
 - n100 的 3 个哪吒 agent 已停止、禁用并删除。
 - 本机 Mac mini 与 QNAP 未做状态改动。
 - `inventory/services.md` 已记录哪吒 agent 清理状态。
+
+## 后续安全背景
+2026-06-19 用户补充：哪吒探针近期出现漏洞，导致公司十多台服务器被入侵并变成肉鸡。该外部事件已记录为 `operations/postmortems/2026-06-19-nezha-agent-vulnerability-botnet-incident.md`，用于解释 HomeLab 继续保持哪吒 agent 移除状态的安全背景。
