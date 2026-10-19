@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-08-27
+last_verified: 2026-10-19
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4、TeslaMate 栈与 Home Assistant 2026.3.1→2026.7.3 升级；2026-08-01，部署 dashboard-ha release 20260801-211049；2026-08-02，修复私网 HTTP 配置并更新到 release 20260802-175138，增加 iPad Safari 弹层动效兼容并更新到 release 20260802-185540；2026-08-03，ddns-go 与 n8n 升级；2026-08-12，ali99 TeslaMate 独立迁入 n100；2026-08-14，部署 FRP；2026-08-24，ali99 Nginx/HTTPS 与 FMO Activity FRP STCP；2026-08-27，统一 app.bi8syn.com 路径）"
+source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4、TeslaMate 栈与 Home Assistant 2026.3.1→2026.7.3 升级；2026-08-01，部署 dashboard-ha release 20260801-211049；2026-08-02，修复私网 HTTP 配置并更新到 release 20260802-175138，增加 iPad Safari 弹层动效兼容并更新到 release 20260802-185540；2026-08-03，ddns-go 与 n8n 升级；2026-08-12，ali99 TeslaMate 独立迁入 n100；2026-08-14，部署 FRP；2026-08-24，ali99 Nginx/HTTPS 与 FMO Activity FRP STCP；2026-08-27，统一 app.bi8syn.com 路径；2026-10-19，部署新 FRP 网关与 ali99-2 服务端）"
 status: partial
 ---
 
@@ -67,7 +67,9 @@ status: partial
 > 1Panel 本体管理端口尚未在 docker 列表体现（1Panel 自身非容器或用别的端口），待确认。
 > 完整端口与随机高位端口（21064-21101 等，疑 HA/HomeKit/matter）未逐一登记。
 
-## 极摩客 NUC · PVE `pve` (192.168.8.16) — ✅ 已只读核实 2026-08-24
+## 已退役：极摩客 NUC · PVE（原 192.168.8.16）
+
+> 2026-10-19 用户确认设备已经售出。本节以下内容仅为退役前历史快照，不代表当前可用资源。
 
 PVE 9.1.1（kernel 6.17，uptime 153 天）。管理页 `https://192.168.8.16:8006`。N100 4核/15Gi/512G。
 
@@ -119,6 +121,21 @@ LXC：`moltbot`(10001, stopped)。
 | Nginx | `:80/tcp`、`:443/tcp` | FMO 静态页、SSTV+ 静态页与 Activity 公网 HTTPS 入口 | Debian 原生 **1.22.1**；配置 `/etc/nginx/sites-available/fmo-sites.conf`；FMO 统一静态入口 `app.bi8syn.com/fmo-companion/privacy/`，根文件 `/fmo-companion/privacy/index.html`；SSTV+ 入口 `app.bi8syn.com/sstv-plus/`（308 到 `zh-hans/privacy.html`），根目录 `/sstv-plus/`，含中英隐私政策与支持页共 5 个文件，每文件一段精确匹配 location；旧子域名 308 跳转；原 Caddy 容器停机保留 |
 | acme.sh | systemd timer | Let's Encrypt TLS-ALPN 签发与自动续期 | **v3.1.4**；`acme-fmo-renew.timer` 每日检查；证书覆盖 `app.bi8syn.com`、`fmo-companion.bi8syn.com`、`fmo-activity.bi8syn.com`；因阿里云未备案 HTTP 拦截，不使用 HTTP-01 |
 
+## FRP 网关 `frp` (192.168.8.198)
+
+| 服务 | 本地/远端端口 | 作用 | 备注 |
+|---|---|---|---|
+| FRP Client (`frpc`) | 主动连接 `47.109.85.53:7000`；未来把 n100 应用映射到 `18000-18099` | n100 应用统一出网隧道 | **v0.71.1**；systemd `frpc.service` active + enabled；配置 `/etc/frp/frpc.toml`，应用片段 `/etc/frp/conf.d/*.toml`；TLS 校验服务端证书；独立 `frp` 用户 |
+| zsh / Oh My Zsh | root 登录 shell | 运维交互环境 | zsh **5.9**；Oh My Zsh commit `964ddf789b022b6958b27d02d7fa54f552de21e9`；root 默认 shell `/usr/bin/zsh` |
+
+## 阿里云主机 `ali99-2` (47.109.85.53)
+
+| 服务 | 端口 | 作用 | 备注 |
+|---|---|---|---|
+| FRP Server (`frps`) | `:7000/tcp`（控制）、`127.0.0.1:18000-18099`（代理池） | 接收 `frp` 网关连接，为本机 Nginx 提供 n100 应用后端 | **v0.71.1**；systemd `frps.service` active + enabled；配置 `/etc/frp/frps.toml`；强制 TLS、Token 鉴权；`proxyBindAddr=127.0.0.1`；独立 `frp` 用户 |
+| Nginx | `:80`、`:443`、`:8443` | 现有 FMO Link 反代，以及未来应用公网 HTTPS 入口 | Debian 原生 **1.26.3**；本次未重复安装；现有 `fmo-link.bi8syn.com` → `127.0.0.1:8080` 保持不变；配置校验通过 |
+| Certbot | systemd timer | `fmo-link.bi8syn.com` 证书自动续期 | 证书续期后由 `/etc/letsencrypt/renewal-hooks/deploy/20-frps-cert` 同步受限副本并重启 frps 加载新证书 |
+
 ## `server` (192.168.8.131)
 
 | 服务 | 本地/远端端口 | 作用 | 备注 |
@@ -133,6 +150,7 @@ LXC：`moltbot`(10001, stopped)。
 - **PVE → QNAP**：PVE 的 `qnap_ssd` 存储是挂自 QNAP 的 NFS；**QNAP 宕机 / 重启会影响 PVE 上用该存储的 VM**（含常开的 fnOS）。
 - **server → ali99**：`server` 的公网 SSH 入口依赖两端 FRP systemd 服务和 `ali99` 的 TCP 7000/13122 可达；家庭路由器无需端口转发。
 - **FMO Activity → 公网**：`server:18088` → FRP STCP → `ali99:127.0.0.1:18088` → Nginx `fmo-activity.bi8syn.com:443`；18088 不直接暴露公网。
+- **未来 n100 应用 → ali99-2**：`n100:<应用端口>` → `frp` 的 frpc → TLS 控制通道 `ali99-2:7000` → `ali99-2:127.0.0.1:18xxx` → 宿主机 Nginx + 域名 HTTPS；家庭路由器无需端口转发，18xxx 不直接暴露公网。
 
 ## TODO
 

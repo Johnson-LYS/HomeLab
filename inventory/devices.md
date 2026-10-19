@@ -1,7 +1,7 @@
 ---
-last_verified: 2026-08-24
+last_verified: 2026-10-19
 verified_by: ai
-source: "用户对话补充（2026-05-30）+ SSH 实连核实（2026-08-12，ali99；2026-08-14，server/.131；2026-08-24，PVE VM 107/ali99/server）"
+source: "用户对话补充（2026-05-30）+ SSH 实连核实（2026-08-12，ali99；2026-08-14，server/.131；2026-08-24，PVE VM 107/ali99/server；2026-10-19，frp/ali99-2）"
 status: partial
 ---
 
@@ -17,8 +17,10 @@ status: partial
 |---|---|---|---|---|---|---|---|
 | QNAP | TS-264C | — / — / 16TB 希捷银河企业氦气盘 | 192.168.8.10 | 2.4G ⚠️ | 客厅电视柜 | 施耐德 BK650M2-CH UPS | 存储 + Emby |
 | 联想百应 NUC | (百应 N100) | N100 / 8G / 256G | 192.168.8.15 | 2.4G ⚠️ | 书房 | TODO | Debian + 1Panel，主力 Docker / 网络服务 |
-| 极摩客 NUC | (N100) | N100 / 16G / 512G | 192.168.8.16 (PVE 管理页) | 2.4G ⚠️ | 书房 | TODO | PVE 实验机 |
+| FRP 网关设备 | 型号待补 | 2 核 / 8G / 约 13G 系统盘 | 192.168.8.198 | 6 个网口，仅 `enp1s0` 启用 | TODO | TODO | Debian 13 + FRP 内网网关 |
 | Mac mini | M4 万兆版 | M4 / 16G / 256G + 1TB 外置(尿袋) | 192.168.8.18 | 万兆 | 书房 | TODO | **运维中枢** + Surge 网关 |
+
+> 原极摩客 N100/PVE（原 `192.168.8.16`）已于 2026-10-19 前售出，不再属于当前环境；其历史操作保留在 `operations/`。
 
 ## 影音 / 终端
 
@@ -36,8 +38,8 @@ status: partial
 | `n100` | 联想百应 NUC | 192.168.8.15 | `johnson` | 22 | `debian-mini` | Debian Linux 6.1.0-37 | ✅ 已连通 2026-05-30 |
 | `jonas` | QNAP | 192.168.8.10 | `Johnson`（大写） | 22 | `Jonas` | QNAP Linux 5.10.60-qnap | ✅ 已连通 2026-05-30 |
 | `ali99` | 阿里云主机 | 8.138.130.141 | `root` | 22 | `iZ7xvdlynshlqdffvudfe2Z` | Debian Linux 6.1.0-31 | ✅ 已连通 2026-08-12；原 TeslaMate 栈已停机保留 |
-| —（直连 IP） | `server`（PVE VM 107） | 192.168.8.131 | `johnson` | 22 | `server` | Debian 13 / x86_64 | ✅ 已连通 2026-08-24；亦可经 `ali99:13122` 的 FRP 入口连接；快照 `pre-frp-web-20260824` |
-| —（直连 IP） | 极摩客 PVE | 192.168.8.16 | `root` | 22 | `pve` | PVE 9.1.1 / kernel 6.17 | ✅ 已连通 2026-05-30 |
+| `frp` | FRP 网关设备 | 192.168.8.198 | `root` | 22 | `frp` | Debian 13.7 / Linux 6.12 | ✅ 已连通 2026-10-19；zsh/Oh My Zsh；FRP client |
+| `ali99-2` | 阿里云 ECS | 47.109.85.53 | `root` | 22 | `iZ2vc1sg3s6a4w9jj36a44Z` | Debian 13.6 / Linux 6.12 | ✅ 已连通 2026-10-19；SSH 别名固定使用 Johnson 公钥 |
 | 本机 | Mac mini | 192.168.8.18 | `liyongsheng` | — | — | macOS（本机） | 运维在此本地执行 |
 
 > 已连通 = 只读 `ssh <别名> 'hostname;whoami;uname -sr'` 成功（走 1Password Agent）。
