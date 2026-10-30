@@ -28,7 +28,7 @@ status: partial
 | FRP `ali99` ↔ `server/.131` | `op://HomeLab/frp-ali99-131/password` | 随机 64 字符 token；两端从 1Password 注入到 root 管理、`frp` 用户只读的本地 token 文件 |
 | FRP `ali99-2` ↔ `frp/.198` | `op://HomeLab/frp-ali99-2-gateway/password` | 独立随机 64 字符 token；两端从 1Password 投放到 `frp` 用户只读的本地 token 文件 |
 | SSH 私钥 | `op://HomeLab/Johnson (Ed25519)` | 1Password SSH Agent 使用 |
-| 雷池 frp 管理员 | `op://HomeLab/safeline-frp-admin/password` | 用户名 admin；管理入口仅 SSH 隧道访问；2026-10-30 创建 |
+| 雷池 frp 管理员 | `op://HomeLab/safeline-frp-admin/password` | 用户名 admin；管理入口 `https://192.168.8.198:9443`（内网）；2026-10-30 创建 |
 | 雷池 frp 独立数据库 | `op://HomeLab/safeline-frp-db/password` | 注入 `/opt/safeline/.env`（0600） |
 | 雷池 frp 内部鉴权 | `op://HomeLab/safeline-frp-internal/password` | 检测管理通道及控制通道 Token；不输出明文 |
 

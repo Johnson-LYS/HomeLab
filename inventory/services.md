@@ -131,11 +131,11 @@ LXC：`moltbot`(10001, stopped)。
 
 | 服务 | 入口/配置 | 当前用途 |
 |---|---|---|
-| SafeLine 社区版 9.4.3 | `/opt/safeline`；7 容器，Docker Compose；管理 `127.0.0.1:9443` | Trust、PKI、OTA 请求检测；无浏览器挑战/动态加密 |
+| SafeLine 社区版 9.4.3 | `/opt/safeline`；7 容器，Docker Compose；管理 `https://192.168.8.198:9443`，仅绑定 LAN IP | Trust、PKI、OTA 请求检测；无浏览器挑战/动态加密 |
 | Trust FRPC | `trust-waf.toml`：远端 18091 → `127.0.0.1:19090` | 雷池 site 2 → `192.168.8.15:18090` |
 | PKI FRPC | `fmo-trust.toml`：远端 18090 → `127.0.0.1:19091` | 雷池 site 3 → `192.168.8.15:18090` |
 | OTA FRPC | `ota.toml`：远端 18089 → `127.0.0.1:19089` | 雷池 site 4 → `192.168.8.15:18089` |
-| 本机入口防护 | `safeline-local-only.service` | 19089/19090/19091/65443 拒绝非 loopback 入站；管理仅回环绑定 |
+| 本机入口防护 | `safeline-local-only.service` | 19089/19090/19091/65443 拒绝非 loopback 入站；管理仅 LAN IP 绑定 |
 
 - 雷池全局从 `X-Real-IP` 取访客 IP；云端覆盖客户端传入的 IP 头，雷池不覆盖原始 HTTPS 协议头。
 - 日志保留：攻击 3 天、统计 7 天、报告 0；容器日志每容器 10MB × 2。
