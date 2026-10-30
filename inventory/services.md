@@ -125,6 +125,23 @@ LXC：`moltbot`(10001, stopped)。
 
 ## FRP 网关 `frp` (192.168.8.198)
 
+### 雷池接入快照（2026-10-30）
+
+来源：SSH / Docker Compose 状态、雷池 API、HTTPS 请求及攻击日志核验。
+
+| 服务 | 入口/配置 | 当前用途 |
+|---|---|---|
+| SafeLine 社区版 9.4.3 | `/opt/safeline`；7 容器，Docker Compose；管理 `127.0.0.1:9443` | Trust、PKI、OTA 请求检测；无浏览器挑战/动态加密 |
+| Trust FRPC | `trust-waf.toml`：远端 18091 → `127.0.0.1:19090` | 雷池 site 2 → `192.168.8.15:18090` |
+| PKI FRPC | `fmo-trust.toml`：远端 18090 → `127.0.0.1:19091` | 雷池 site 3 → `192.168.8.15:18090` |
+| OTA FRPC | `ota.toml`：远端 18089 → `127.0.0.1:19089` | 雷池 site 4 → `192.168.8.15:18089` |
+| 本机入口防护 | `safeline-local-only.service` | 19089/19090/19091/65443 拒绝非 loopback 入站；管理仅回环绑定 |
+
+- 雷池全局从 `X-Real-IP` 取访客 IP；云端覆盖客户端传入的 IP 头，雷池不覆盖原始 HTTPS 协议头。
+- 日志保留：攻击 3 天、统计 7 天、报告 0；容器日志每容器 10MB × 2。
+- 部署后根分区约剩余 8.5GB，空载容器内存合计约 650MB；实时使用 `df -h /`、`docker stats --no-stream` 拉取。
+- 下表中旧 FRPC 直达 n100 描述为迁移前快照，当前路由以上述表为准。
+
 | 服务 | 本地/远端端口 | 作用 | 备注 |
 |---|---|---|---|
 | FRP Client (`frpc`) | 主动连接 `47.109.85.53:7000`；把 n100 应用映射到 `18000-18099` | n100 应用统一出网隧道 | **v0.71.1**；systemd `frpc.service` active + enabled；配置 `/etc/frp/frpc.toml`，应用片段 `/etc/frp/conf.d/*.toml`；FMO Trust 使用 `fmo-trust.toml` 映射 `192.168.8.15:18090` → 远端 18090；TLS 校验服务端证书；独立 `frp` 用户 |
