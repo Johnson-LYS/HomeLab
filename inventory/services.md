@@ -139,6 +139,7 @@ LXC：`moltbot`(10001, stopped)。
 
 - 雷池全局从 `X-Real-IP` 取访客 IP；云端覆盖客户端传入的 IP 头，雷池不覆盖原始 HTTPS 协议头。
 - 日志保留：攻击 3 天、统计 7 天、报告 0；容器日志每容器 10MB × 2。
+- 2026-10-31 上传优化：持久挂载的 `/opt/safeline/resources/nginx/nginx.conf` 中 `client_body_buffer_size=1m`，由 128k 调整；仅增大请求体内存缓冲，上传大小上限和检测引擎检查长度不变。版本升级后需核对此自定义项。
 - 部署后根分区约剩余 8.5GB，空载容器内存合计约 650MB；实时使用 `df -h /`、`docker stats --no-stream` 拉取。
 - 下表中旧 FRPC 直达 n100 描述为迁移前快照，当前路由以上述表为准。
 
