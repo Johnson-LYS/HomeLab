@@ -1,5 +1,5 @@
 ---
-last_verified: 2026-10-19
+last_verified: 2026-10-30
 verified_by: ai
 source: "用户对话补充（2026-05-30）+ FRP 公网路径端到端核实（2026-08-14）+ FMO HTTPS/FRP STCP 公网路径核实（2026-08-24）+ app.bi8syn.com 统一路径核实（2026-08-27）+ 新 FRP 网关/ali99-2 端到端核实及 FMO Trust 公网发布（2026-10-19）"
 status: partial
@@ -118,6 +118,15 @@ status: partial
 - 两个 A 记录均指向 `47.109.85.53`；公共 DNS 解析已核实。
 - 两个域名共用 Certbot/Let's Encrypt ECDSA 证书，SAN 同时包含两者，证书到期日为 2027-01-17；`certbot.timer` 自动续期，deploy hook 校验并 reload Nginx。
 - FMO Trust 仅经 Nginx 80/443 暴露；FRP 应用端口 18090 只在云服务器回环地址监听。
+
+### OTA 公网入口（2026-10-30 实测）
+
+| 域名 | 云端回环 | 内网目标 | 配置 |
+|---|---|---|---|
+| `ota.bi8syn.com` → `47.109.85.53` | `127.0.0.1:18089` | `192.168.8.15:18089` | `frp:/etc/frp/conf.d/ota.toml`；`ali99-2:/etc/nginx/sites-available/ota` |
+
+- HTTPS 使用 Let's Encrypt ECDSA 证书，签发时到期日 2027-01-28；Certbot timer 自动续期并由现有 hook reload Nginx。
+- 保留原始 Host、Range/条件请求与上游缓存头；关闭云端代理缓存及缓冲，遵循上游限速。18089 不直接暴露公网。
 
 ### FMO 公网 HTTPS 入口（2026-08-27 实测）
 

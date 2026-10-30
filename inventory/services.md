@@ -1,5 +1,5 @@
 ---
-last_verified: 2026-10-19
+last_verified: 2026-10-30
 verified_by: ai
 source: "用户对话补充（2026-05-30）+ AI 只读/变更核实（2026-06-14，ssh n100 docker/ss/chrony/go2rtc）+ AI 变更核实（2026-06-18，n100 哪吒 agent 清理；2026-06-30，部署 ham-a-exam-trainer 静态站点；2026-07-02，更新 ham-a-exam-trainer 静态内容并验证 ham.jsho.top，release 20260702-114908 / 20260702-161851 / 20260702-225749；2026-07-04，脚本化更新 release 20260704-002336；2026-07-05，脚本化更新 release 20260705-214009；2026-07-10，部署 Mac mini screen-sharing-control launchd 服务；2026-07-22，共享 PostgreSQL 17.6→18.4、TeslaMate 栈与 Home Assistant 2026.3.1→2026.7.3 升级；2026-08-01，部署 dashboard-ha release 20260801-211049；2026-08-02，修复私网 HTTP 配置并更新到 release 20260802-175138，增加 iPad Safari 弹层动效兼容并更新到 release 20260802-185540；2026-08-03，ddns-go 与 n8n 升级；2026-08-12，ali99 TeslaMate 独立迁入 n100；2026-08-14，部署 FRP；2026-08-24，ali99 Nginx/HTTPS 与 FMO Activity FRP STCP；2026-08-27，统一 app.bi8syn.com 路径；2026-10-19，部署新 FRP 网关与 ali99-2 服务端、发布 FMO Trust 公网 HTTPS）"
 status: partial
@@ -61,6 +61,7 @@ status: partial
 | new-api | :30001 | AI API 网关 |
 | bark-server | :8787 | 推送通知（可用于告警） |
 | 基础: postgres15 / redis | 内部 | 多服务依赖 |
+| BI8SYN OTA | :18089 | 容器 `bi8syn-ota`；静态文件目录 `/opt/1panel/docker/compose/ota/public`；经 FRP → ali99-2 Nginx 发布 `https://ota.bi8syn.com`；2026-10-30 实测首页 ready；Let's Encrypt ECDSA，签发时到期 2027-01-28，Certbot 自动续期 |
 | FMO Trust | `192.168.8.15:18090` | 6 个容器；管理域名 `trust.bi8syn.com`、公共 PKI 域名 `pki.bi8syn.com`；目录 `/home/johnson/services/fmo-trust`；独立 PostgreSQL 不发布宿主端口；经 `frp` 网关和 `ali99-2` Nginx 暴露 HTTPS；尚未登记管理员 Passkey、未创建生产 CA |
 
 > 哪吒 agent：2026-06-18 已从 n100 移除；本机 Mac mini 与 QNAP `jonas` 未发现哪吒探针。
