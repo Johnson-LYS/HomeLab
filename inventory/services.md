@@ -127,6 +127,8 @@ LXC：`moltbot`(10001, stopped)。
 
 ### 雷池接入快照（2026-10-30）
 
+OTA 跨域配置补充（2026-11-08，来源：ali99-2 Nginx 配置与公网 HTTP 验证）：`ota.bi8syn.com` 在云端 `/etc/nginx/sites-available/ota` 仅允许 Origin `https://rf-link.bi8syn.com`；允许 GET/HEAD/OPTIONS，预检在云端返回 204；暴露 ETag、Content-Range 等下载响应头，不启用跨域凭据。上游缓存策略保持。
+
 来源：SSH / Docker Compose 状态、雷池 API、HTTPS 请求及攻击日志核验。
 
 | 服务 | 入口/配置 | 当前用途 |
